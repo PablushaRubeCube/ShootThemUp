@@ -3,6 +3,9 @@
 
 #include "Components/STUHealthComponent.h"
 
+
+DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent,All,All)
+
 // Sets default values for this component's properties
 USTUHealthComponent::USTUHealthComponent():
 MaxHealth(100)
@@ -23,15 +26,17 @@ void USTUHealthComponent::BeginPlay()
 	GetOwner()->OnTakeAnyDamage.AddDynamic(this,&USTUHealthComponent::OnTakeAnyDamageHandle);
 	
 	Health = MaxHealth;
+	OnChangeHealth.Broadcast(Health);
 	
 }
 
 void USTUHealthComponent::OnTakeAnyDamageHandle(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
 	AController* InstigatedBy, AActor* DamageCauser)
 {
-	if(ISDead())return;
+	if(Damage <= 0.f || ISDead())return;
 
-	Health -=Damage;
+	Health = FMath::Clamp(Health - Damage,0.f,MaxHealth);
+	OnChangeHealth.Broadcast(Health);
 	
 	if(ISDead())
 	{

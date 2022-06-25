@@ -79,8 +79,19 @@ void ASTUCharacter::DeathChar()
 	PlayAnimMontage(DeathMontage);
 	
 	GetCharacterMovement()->DisableMovement();
+
+	SetLifeSpan(5.f);
 }
 
+void ASTUCharacter::OnChangeHealth(float Health)
+{
+	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
+}
+
+bool ASTUCharacter::IsRunning() const
+{
+	return bIsRun && bIsMoveForward && !GetVelocity().IsZero();
+}
 
 // Called when the game starts or when spawned
 void ASTUCharacter::BeginPlay()
@@ -89,25 +100,19 @@ void ASTUCharacter::BeginPlay()
 
 	check(HealthComponent);
 	check(HealthTextComponent);
-	
+	check(GetCharacterMovement());
+
+	OnChangeHealth(HealthComponent->GetHealth());
 	HealthComponent->OnDeath.AddUObject(this,&ASTUCharacter::DeathChar);
+	HealthComponent->OnChangeHealth.AddUObject(this, &ASTUCharacter::OnChangeHealth);
 }
 
-bool ASTUCharacter::IsRunning() const
-{
-	return bIsRun && bIsMoveForward && !GetVelocity().IsZero();
-}
 
 // Called every frame
 void ASTUCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	const float Health = HealthComponent->GetHealth();
-	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"),Health)));
-
-//	TakeDamage(0.1f,FDamageEvent(),GetController(),this);
-	
 }
 
 

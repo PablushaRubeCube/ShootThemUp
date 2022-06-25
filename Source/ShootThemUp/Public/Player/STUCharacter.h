@@ -54,6 +54,8 @@ private://functions
 	float GetMovementDirection() const;
 
 	void DeathChar();
+
+	void OnChangeHealth(float Health);
 	
 protected:
 	// Called when the game starts or when spawned

@@ -36,6 +36,10 @@ private://variables
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Damage", meta=(AllowPrivateAccess = "true"))
 	float Damage;
 
+	// Choose Damage Type for object
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage", meta=(AllowPrivateAccess = "true"))
+	TSubclassOf<UDamageType> DamageType;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
