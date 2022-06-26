@@ -22,9 +22,35 @@ private://varibales
 
 	float Health;
 
+	//Activate autoheal
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health", meta = (AllowPrivateAccess = "true"))
+	bool bIsActivateAutoHeal;
+
+	//Timer for AutoHeal
+	FTimerHandle HealTimerHandle;
+
+	//rate of auto heal
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health", meta = (AllowPrivateAccess = "true", EditCondition = "bIsActivateAutoHeal"))
+	float HealthUpdateTime;
+
+	//Delay for timer autoHeal
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health", meta = (AllowPrivateAccess = "true", EditCondition = "bIsActivateAutoHeal"))
+	float HealDelay;
+
+	//Value of Autoheal player
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health", meta = (AllowPrivateAccess = "true", EditCondition = "bIsActivateAutoHeal"))
+	float HealModifier;
+
 private://functions
+
 	UFUNCTION()
-void OnTakeAnyDamageHandle( AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser );
+	void OnTakeAnyDamageHandle( AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser );
+
+	//regeneration health character
+	void HealUpdate();
+
+	//Set Health and call Broadcast
+	void SetHealth(float HealthValue);
 
 protected://variables
 	
@@ -44,5 +70,5 @@ public://Variables
 public://functions
 	FORCEINLINE int32 GetHealth()const {return Health;}
 
-	FORCEINLINE bool ISDead() const {return Health <= 0;}
+	FORCEINLINE bool ISDead() const {return FMath::IsNearlyZero(Health); }
 };

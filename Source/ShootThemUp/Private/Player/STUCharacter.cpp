@@ -10,6 +10,7 @@
 #include "Components/STUCharacterMovementComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/Controller.h"
 
 // Sets default values
 ASTUCharacter::ASTUCharacter()
@@ -81,6 +82,8 @@ void ASTUCharacter::DeathChar()
 	GetCharacterMovement()->DisableMovement();
 
 	SetLifeSpan(5.f);
+
+	if (Controller) Controller->ChangeState(NAME_Spectating);
 }
 
 void ASTUCharacter::OnChangeHealth(float Health)

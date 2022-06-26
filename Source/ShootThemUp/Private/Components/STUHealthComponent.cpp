@@ -2,12 +2,18 @@
 
 
 #include "Components/STUHealthComponent.h"
+#include "Engine/World.h"
+#include "TimerManager.h"
 
 
 DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent,All,All)
 
 // Sets default values for this component's properties
 USTUHealthComponent::USTUHealthComponent():
+bIsActivateAutoHeal(true),
+HealthUpdateTime(0.3),
+HealDelay(3),
+HealModifier(1),
 MaxHealth(100)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
@@ -25,21 +31,41 @@ void USTUHealthComponent::BeginPlay()
 
 	GetOwner()->OnTakeAnyDamage.AddDynamic(this,&USTUHealthComponent::OnTakeAnyDamageHandle);
 	
-	Health = MaxHealth;
-	OnChangeHealth.Broadcast(Health);
+	SetHealth(MaxHealth);
 	
 }
 
 void USTUHealthComponent::OnTakeAnyDamageHandle(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
 	AController* InstigatedBy, AActor* DamageCauser)
 {
-	if(Damage <= 0.f || ISDead())return;
+	if(Damage <= 0.f || ISDead() || !GetWorld())return;
 
-	Health = FMath::Clamp(Health - Damage,0.f,MaxHealth);
-	OnChangeHealth.Broadcast(Health);
+	SetHealth(Health - Damage);
+
+	GetWorld()->GetTimerManager().ClearTimer(HealTimerHandle);
 	
 	if(ISDead())
 	{
 		OnDeath.Broadcast();
 	}
+	else if (bIsActivateAutoHeal)
+	{
+		GetWorld()->GetTimerManager().SetTimer(HealTimerHandle, this, &USTUHealthComponent::HealUpdate, HealthUpdateTime, true, HealDelay);
+	}
+}
+
+void USTUHealthComponent::HealUpdate()
+{
+	SetHealth(Health + HealModifier);
+
+	if (FMath::IsNearlyEqual(Health,MaxHealth) && GetWorld())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(HealTimerHandle);
+	}
+}
+
+void USTUHealthComponent::SetHealth(float HealthValue)
+{
+	Health = FMath::Clamp(HealthValue, 0.f, MaxHealth);
+	OnChangeHealth.Broadcast(HealthValue);
 }
