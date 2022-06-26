@@ -39,8 +39,17 @@ private://variables
 	//UPROPERTY(BlueprintReadOnly, Category= "Movement", meta = (AllowPrivateAccess = "true"))
 	bool bIsMoveForward;
 
+	//Montage for death animation
 	UPROPERTY(EditAnywhere, Category= "Animation", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* DeathMontage;
+
+	// Landing range damage
+	UPROPERTY(EditAnywhere, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	FVector2D LandedDamage;
+
+	// Landing range velocity
+	UPROPERTY(EditAnywhere, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	FVector2D LandedDamageVelocity;
 
 private://functions
 	
@@ -56,6 +65,10 @@ private://functions
 	void DeathChar();
 
 	void OnChangeHealth(float Health);
+
+	//call when we landed
+	UFUNCTION()
+	void OnGroudLanded(const FHitResult& Hit);
 	
 protected:
 	// Called when the game starts or when spawned

@@ -12,6 +12,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Controller.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogCharacter,All,All)
+
 // Sets default values
 ASTUCharacter::ASTUCharacter()
 /*(const FObjectInitializer& ObjInit):
@@ -36,6 +38,9 @@ Super(ObjInit.SetDefaultSubobjectClass<USTUCharacterMovementComponent>(ACharacte
 	
 	bIsRun = (false);
 	bIsMoveForward = (false);
+
+	LandedDamage = FVector2D(10.f, 100.f);
+	LandedDamageVelocity = FVector2D(700.f, 1200.f);
 }
 
 void ASTUCharacter::MoveForward(float Value)
@@ -91,6 +96,15 @@ void ASTUCharacter::OnChangeHealth(float Health)
 	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }
 
+void ASTUCharacter::OnGroudLanded(const FHitResult& Hit)
+{
+	const float ZVelocity = -GetCharacterMovement()->Velocity.Z;
+	if (ZVelocity < LandedDamageVelocity.X) return;
+
+	const float FinalDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, ZVelocity);
+	TakeDamage(FinalDamage, FDamageEvent{}, nullptr, nullptr);
+}
+
 bool ASTUCharacter::IsRunning() const
 {
 	return bIsRun && bIsMoveForward && !GetVelocity().IsZero();
@@ -108,6 +122,7 @@ void ASTUCharacter::BeginPlay()
 	OnChangeHealth(HealthComponent->GetHealth());
 	HealthComponent->OnDeath.AddUObject(this,&ASTUCharacter::DeathChar);
 	HealthComponent->OnChangeHealth.AddUObject(this, &ASTUCharacter::OnChangeHealth);
+	LandedDelegate.AddDynamic(this, &ASTUAICharacter::OnGroudLanded);
 }
 
 
