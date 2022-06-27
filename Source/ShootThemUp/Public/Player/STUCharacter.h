@@ -43,12 +43,15 @@ private://variables
 	UPROPERTY(EditAnywhere, Category= "Animation", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* DeathMontage;
 
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
+	float LifeSpanOnDeath;
+
 	// Landing range damage
-	UPROPERTY(EditAnywhere, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, Category = "Damage", meta = (AllowPrivateAccess = "true"))
 	FVector2D LandedDamage;
 
 	// Landing range velocity
-	UPROPERTY(EditAnywhere, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, Category = "Damage", meta = (AllowPrivateAccess = "true"))
 	FVector2D LandedDamageVelocity;
 
 private://functions

@@ -25,6 +25,7 @@ Super(ObjInit.SetDefaultSubobjectClass<USTUCharacterMovementComponent>(ACharacte
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArmComponent->SetupAttachment(GetRootComponent());
 	SpringArmComponent->bUsePawnControlRotation = true;
+	SpringArmComponent->TargetOffset = FVector(( 0.000000, 100.000000, 80.000000));
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
@@ -35,12 +36,15 @@ Super(ObjInit.SetDefaultSubobjectClass<USTUCharacterMovementComponent>(ACharacte
 
 	HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("HealthTextComponent"));
 	HealthTextComponent->SetupAttachment(RootComponent);
+	HealthTextComponent->bOwnerNoSee = true;
 	
 	bIsRun = (false);
 	bIsMoveForward = (false);
 
 	LandedDamage = FVector2D(10.f, 100.f);
 	LandedDamageVelocity = FVector2D(700.f, 1200.f);
+
+	LifeSpanOnDeath = 5.f;
 }
 
 void ASTUCharacter::MoveForward(float Value)
@@ -86,7 +90,7 @@ void ASTUCharacter::DeathChar()
 	
 	GetCharacterMovement()->DisableMovement();
 
-	SetLifeSpan(5.f);
+	SetLifeSpan(LifeSpanOnDeath);
 
 	if (Controller) Controller->ChangeState(NAME_Spectating);
 }
@@ -139,6 +143,8 @@ void ASTUCharacter::Tick(float DeltaTime)
 void ASTUCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	check(PlayerInputComponent);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASTUCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ASTUCharacter::MoveRight);

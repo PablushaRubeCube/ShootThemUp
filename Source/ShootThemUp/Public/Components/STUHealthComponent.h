@@ -6,8 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "STUHealthComponent.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnDeath)
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnChangeHealth,float)
+DECLARE_MULTICAST_DELEGATE(FOnDeathSignature);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnChangeHealthSignature, float);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SHOOTTHEMUP_API USTUHealthComponent : public UActorComponent
@@ -63,9 +63,9 @@ protected:
 
 public://Variables
 	
-	FOnDeath OnDeath;
+	FOnDeathSignature OnDeath;
 
-	FOnChangeHealth OnChangeHealth;
+	FOnChangeHealthSignature OnChangeHealth;
 
 public://functions
 	FORCEINLINE int32 GetHealth()const {return Health;}
