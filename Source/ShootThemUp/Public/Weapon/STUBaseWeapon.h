@@ -10,49 +10,56 @@ UCLASS()
 class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	ASTUBaseWeapon();
 
 private://varibales
 
 	FTimerHandle ShootTimer;
-	
+
+private://functions
+
+	void MakeDamage(const FHitResult & Result);
+
 protected://variables
 
 	//skeletal mesh our weapon
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Weapon")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	USkeletalMeshComponent* WeaponMeshComponent;
 
-	UPROPERTY(EditAnywhere, Category= "Weapon")
+	UPROPERTY(EditAnywhere, Category = "Weapon")
 	float MaxShotDistance;
 
-	UPROPERTY(EditAnywhere, Category= "Weapon")
+	UPROPERTY(EditAnywhere, Category = "Weapon")
 	FName SocketName = "MuzzleFlashSocket";
 
-	UPROPERTY(EditAnywhere, Category="Weapon")
+	UPROPERTY(EditAnywhere, Category = "Weapon")
 	float FireRate;
 
-	UPROPERTY(EditAnywhere, Category="Weapon")
+	UPROPERTY(EditAnywhere, Category = "Weapon")
 	float BulletSpread;
-	
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	float DamageAmount;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
+
 
 public:	//functions
-virtual	void StartFireWeapon();
-virtual	void StopFireWeapon();
+	virtual	void StartFireWeapon();
+	virtual	void StopFireWeapon();
 
 
 	APlayerController* GetPlayerController() const;
 	bool GetViewPort(FVector& ViewLocation, FRotator& ViewRotator) const;
 	FVector GetMuzzleLocation() const;
 	bool GetTraceData(FVector& StartTrace, FVector& EndTrace)  const;
-	void MakeHit(const UWorld* World, FHitResult& HitResult,const FVector & StartTrace, const FVector & EndTrace) const;
-	
+	void MakeHit(const UWorld* World, FHitResult& HitResult, const FVector& StartTrace, const FVector& EndTrace) const;
+
 	void MakeShot();
 
 };

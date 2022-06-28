@@ -6,12 +6,16 @@
 #include "DrawDebugHelpers.h"
 #include "Player/STUCharacter.h"
 #include "Player/STUPlayerController.h"
+#include "Kismet/GameplayStatics.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon,All,All)
 
 // Sets default values
 ASTUBaseWeapon::ASTUBaseWeapon():
 MaxShotDistance(1500.f),
 FireRate(0.1f),
-BulletSpread(1.5)
+BulletSpread(1.5),
+DamageAmount(10.f)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -20,11 +24,20 @@ BulletSpread(1.5)
 	SetRootComponent(WeaponMeshComponent);
 }
 
+void ASTUBaseWeapon::MakeDamage(const FHitResult& Result)
+{
+	const auto HitActor = Result.GetActor();
+	if (!HitActor) return;
+	HitActor->TakeDamage(DamageAmount, FDamageEvent{}, GetPlayerController(), this);
+}
+
 
 // Called when the game starts or when spawned
 void ASTUBaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
+
+	check(WeaponMeshComponent);
 	
 }
 
@@ -115,8 +128,13 @@ void ASTUBaseWeapon::MakeShot()
 			
 				if(HitResult.bBlockingHit)
 				{
-					DrawDebugSphere(World,HitResult.ImpactPoint,3.f,10,FColor::Red,false,3.f,0.f,3.f);
-					DrawDebugLine(World,GetMuzzleLocation(),HitResult.ImpactPoint,FColor::Red,false,3.f,0,3.f);
+					ASTUCharacter* HitChar = Cast<ASTUCharacter>(HitResult.Actor);
+					if (HitChar)
+					{
+						MakeDamage(HitResult);
+						DrawDebugSphere(World, HitResult.ImpactPoint, 3.f, 10, FColor::Red, false, 3.f, 0.f, 3.f);
+						DrawDebugLine(World, GetMuzzleLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.f, 0, 3.f);
+					}
 				}
 	}
 }

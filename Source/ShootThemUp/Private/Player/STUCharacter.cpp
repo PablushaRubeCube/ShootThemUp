@@ -11,6 +11,7 @@
 #include "Components/TextRenderComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Controller.h"
+#include "Components/CapsuleComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogCharacter,All,All)
 
@@ -93,6 +94,8 @@ void ASTUCharacter::DeathChar()
 	SetLifeSpan(LifeSpanOnDeath);
 
 	if (Controller) Controller->ChangeState(NAME_Spectating);
+
+	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 }
 
 void ASTUCharacter::OnChangeHealth(float Health)
@@ -145,6 +148,7 @@ void ASTUCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	check(PlayerInputComponent);
+	check(WeaponComponent);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASTUCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ASTUCharacter::MoveRight);
