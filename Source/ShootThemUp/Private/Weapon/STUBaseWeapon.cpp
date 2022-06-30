@@ -3,7 +3,6 @@
 
 #include "Weapon/STUBaseWeapon.h"
 
-#include "DrawDebugHelpers.h"
 #include "Player/STUCharacter.h"
 #include "Player/STUPlayerController.h"
 #include "Kismet/GameplayStatics.h"
@@ -43,14 +42,11 @@ void ASTUBaseWeapon::BeginPlay()
 
 void ASTUBaseWeapon::StartFireWeapon()
 {
-	MakeShot();
-	GetWorldTimerManager().SetTimer(ShootTimer,this, &ASTUBaseWeapon::MakeShot,FireRate,true);
 }
 
 
 void ASTUBaseWeapon::StopFireWeapon()
 {
-	GetWorldTimerManager().ClearTimer(ShootTimer);
 }
 
 
@@ -97,8 +93,7 @@ bool ASTUBaseWeapon::GetTraceData(FVector& StartTrace, FVector& EndTrace) const
 	if(!GetViewPort(ViewLocation,ViewRotator)) return false;
 				
 	StartTrace = ViewLocation;
-	const float HalfRad = FMath::DegreesToRadians(BulletSpread);
-	const FVector StartTraceDirection = FMath::VRandCone(ViewRotator.Vector(),HalfRad);
+	const FVector StartTraceDirection = ViewRotator.Vector();
 	EndTrace = StartTrace + StartTraceDirection * MaxShotDistance;
 	return true;
 }
@@ -116,26 +111,5 @@ void ASTUBaseWeapon::MakeHit(const UWorld* World, FHitResult& HitResult,const FV
 
 void ASTUBaseWeapon::MakeShot()
 {
-	UWorld* World = GetWorld();
-	if(World)
-	{
-		FVector StartTrace;
-		FVector EndTrace;
-		if(!GetTraceData(StartTrace, EndTrace))return;
-		
-		FHitResult HitResult;
-		MakeHit(World,HitResult, StartTrace, EndTrace);
-			
-				if(HitResult.bBlockingHit)
-				{
-					ASTUCharacter* HitChar = Cast<ASTUCharacter>(HitResult.Actor);
-					if (HitChar)
-					{
-						MakeDamage(HitResult);
-						DrawDebugSphere(World, HitResult.ImpactPoint, 3.f, 10, FColor::Red, false, 3.f, 0.f, 3.f);
-						DrawDebugLine(World, GetMuzzleLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.f, 0, 3.f);
-					}
-				}
-	}
 }
 

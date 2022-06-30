@@ -15,13 +15,10 @@ public:
 	// Sets default values for this actor's properties
 	ASTUBaseWeapon();
 
-private://varibales
-
-	FTimerHandle ShootTimer;
 
 private://functions
 
-	void MakeDamage(const FHitResult & Result);
+
 
 protected://variables
 
@@ -44,22 +41,23 @@ protected://variables
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	float DamageAmount;
 
-protected:
+protected://functions
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void MakeDamage(const FHitResult& Result);
 
 public:	//functions
 	virtual	void StartFireWeapon();
 	virtual	void StopFireWeapon();
-
+	virtual void MakeShot();
 
 	APlayerController* GetPlayerController() const;
 	bool GetViewPort(FVector& ViewLocation, FRotator& ViewRotator) const;
 	FVector GetMuzzleLocation() const;
-	bool GetTraceData(FVector& StartTrace, FVector& EndTrace)  const;
+	virtual bool GetTraceData(FVector& StartTrace, FVector& EndTrace)  const;
 	void MakeHit(const UWorld* World, FHitResult& HitResult, const FVector& StartTrace, const FVector& EndTrace) const;
 
-	void MakeShot();
+	
 
 };
