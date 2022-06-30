@@ -18,10 +18,13 @@ private://varibales
 
 	FTimerHandle ShootTimer;
 
+protected://functions
+	virtual void MakeShot() override;
+
 public://functions
 	virtual	void StartFireWeapon() override;
 	virtual	void StopFireWeapon() override;
-	virtual void MakeShot() override;
+	
 
 	virtual bool GetTraceData(FVector& StartTrace, FVector& EndTrace)  const override;
 };

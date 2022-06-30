@@ -13,5 +13,21 @@ UCLASS()
 class SHOOTTHEMUP_API ASTULauncherWeapon : public ASTUBaseWeapon
 {
 	GENERATED_BODY()
+
+private://Variables
+	
+	//class to spawn when we shot 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"));
+	TSubclassOf<class ASTUProjectile> Projectile;
+
+protected://functions
+
+	virtual void MakeShot() override;
+
+public://functnios
+
+	virtual	void StartFireWeapon() override;
+	//virtual	void StopFireWeapon() override;
+	
 	
 };
