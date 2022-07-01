@@ -11,10 +11,7 @@ DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon,All,All)
 
 // Sets default values
 ASTUBaseWeapon::ASTUBaseWeapon():
-MaxShotDistance(1500.f),
-FireRate(0.1f),
-BulletSpread(1.5),
-DamageAmount(10.f)
+MaxShotDistance(1500.f)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -23,12 +20,7 @@ DamageAmount(10.f)
 	SetRootComponent(WeaponMeshComponent);
 }
 
-void ASTUBaseWeapon::MakeDamage(const FHitResult& Result)
-{
-	const auto HitActor = Result.GetActor();
-	if (!HitActor) return;
-	HitActor->TakeDamage(DamageAmount, FDamageEvent{}, GetPlayerController(), this);
-}
+
 
 
 // Called when the game starts or when spawned

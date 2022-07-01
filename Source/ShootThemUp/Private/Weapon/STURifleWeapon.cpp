@@ -6,6 +6,13 @@
 #include "DrawDebugHelpers.h"
 #include "Player/STUCharacter.h"
 
+void ASTURifleWeapon::MakeDamage(const FHitResult& Result)
+{
+	const auto HitActor = Result.GetActor();
+	if (!HitActor) return;
+	HitActor->TakeDamage(DamageAmount, FDamageEvent{}, GetPlayerController(), this);
+}
+
 void ASTURifleWeapon::StartFireWeapon()
 {
 	MakeShot();

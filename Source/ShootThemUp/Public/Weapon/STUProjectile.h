@@ -23,8 +23,31 @@ private://variables
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProjectileComponent", meta = (AllowPrivateAccess = "true"))
 	class UProjectileMovementComponent* ProjectileComponent;
 
+	float LifeSpan;
+
 	//Prjetctile Direction
 	FVector DirectionProjectile;
+
+	//What Damage inflicts this object
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Damage", meta = (AllowPrivateAccess = "true"))
+	float Damage;
+
+	//Radius Damage Sphere
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Damage", meta = (AllowPrivateAccess = "true"))
+	float Radius;
+
+	//Do Full Damage in radius?
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Damage", meta = (AllowPrivateAccess = "true"))
+	bool bDoFullDamage;
+
+private://functions
+
+	UFUNCTION()
+	void OnProjectileHit( UPrimitiveComponent* HitComponent,
+		AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	UFUNCTION()
+	AController* GetPawnController();
 
 protected:
 	// Called when the game starts or when spawned

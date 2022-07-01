@@ -23,7 +23,7 @@ private://functions
 protected://variables
 
 	//skeletal mesh our weapon
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
 	USkeletalMeshComponent* WeaponMeshComponent;
 
 	UPROPERTY(EditAnywhere, Category = "Weapon")
@@ -32,20 +32,11 @@ protected://variables
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	FName SocketName = "MuzzleFlashSocket";
 
-	UPROPERTY(EditAnywhere, Category = "Weapon")
-	float FireRate;
 
-	UPROPERTY(EditAnywhere, Category = "Weapon")
-	float BulletSpread;
-
-	UPROPERTY(EditAnywhere, Category = "Weapon")
-	float DamageAmount;
 
 protected://functions
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	void MakeDamage(const FHitResult& Result);
 
 public:	//functions
 	virtual	void StartFireWeapon();

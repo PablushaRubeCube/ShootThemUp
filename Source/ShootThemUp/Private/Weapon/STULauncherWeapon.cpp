@@ -28,6 +28,7 @@ void ASTULauncherWeapon::MakeShot()
 		ASTUProjectile* SpawnedProjectile = GetWorld()->SpawnActorDeferred<ASTUProjectile>(Projectile,SpawnTransform);
 		if (SpawnedProjectile)
 		{
+			SpawnedProjectile->SetOwner(GetOwner());
 			SpawnedProjectile->SetDirectionProjectile(Direction);
 			SpawnedProjectile->FinishSpawning(SpawnTransform);
 		}

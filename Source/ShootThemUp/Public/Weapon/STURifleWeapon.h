@@ -18,6 +18,19 @@ private://varibales
 
 	FTimerHandle ShootTimer;
 
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	float FireRate = (0.1f);
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	float BulletSpread = (1.5f);
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	float DamageAmount = (10.f);
+
+private://functions
+
+	void MakeDamage(const FHitResult& Result);
+
 protected://functions
 	virtual void MakeShot() override;
 
