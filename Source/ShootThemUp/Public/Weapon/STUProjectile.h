@@ -20,10 +20,18 @@ private://variables
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	class USphereComponent* CollisionSphere;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProjectileComponent", meta = (AllowPrivateAccess = "true"))
+	class UProjectileMovementComponent* ProjectileComponent;
+
+	//Prjetctile Direction
+	FVector DirectionProjectile;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
+
+	FORCEINLINE void SetDirectionProjectile(FVector Direction) { DirectionProjectile = Direction; }
 
 };

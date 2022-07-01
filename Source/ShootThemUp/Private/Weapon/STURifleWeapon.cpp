@@ -35,9 +35,13 @@ void ASTURifleWeapon::MakeShot()
 			if (HitChar)
 			{
 				MakeDamage(HitResult);
-				DrawDebugSphere(World, HitResult.ImpactPoint, 3.f, 10, FColor::Red, false, 3.f, 0.f, 3.f);
-				DrawDebugLine(World, GetMuzzleLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.f, 0, 3.f);
 			}
+			DrawDebugSphere(World, HitResult.ImpactPoint, 3.f, 10, FColor::Red, false, 3.f, 0.f, 3.f);
+			DrawDebugLine(World, GetMuzzleLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.f, 0, 3.f);
+		}
+		else
+		{
+			DrawDebugLine(World, GetMuzzleLocation(), EndTrace, FColor::Red, false, 3.f, 0, 3.f);
 		}
 	}
 }

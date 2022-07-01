@@ -3,6 +3,7 @@
 
 #include "Weapon/STUProjectile.h"
 #include "Components/SphereComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
 ASTUProjectile::ASTUProjectile()
@@ -13,13 +14,21 @@ ASTUProjectile::ASTUProjectile()
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	CollisionSphere->SetSphereRadius(5.f);
 	SetRootComponent(CollisionSphere);
+
+	ProjectileComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComponent"));
+	ProjectileComponent->InitialSpeed = (2000.f);
+
 }
 
 // Called when the game starts or when spawned
 void ASTUProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	check(ProjectileComponent);
 	
+	ProjectileComponent->Velocity = DirectionProjectile * ProjectileComponent->InitialSpeed;
+	SetLifeSpan(5.f);
 }
 
 
