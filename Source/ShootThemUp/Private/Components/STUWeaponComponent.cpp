@@ -4,10 +4,16 @@
 #include "Components/STUWeaponComponent.h"
 
 #include "Player/STUCharacter.h"
+#include "Weapon/STUBaseWeapon.h"
+
+DEFINE_LOG_CATEGORY_STATIC(STUWeaponComponent, All, All)
 
 // Sets default values for this component's properties
 USTUWeaponComponent::USTUWeaponComponent():
-SocketName("WeaponPoint")
+SocketWeaponEquipName("WeaponEquipPoint"),
+SocketWeaponArmoryName("WeaponArmoryPoint"),
+IndexWeapon(0),
+CurrentWeapon(nullptr)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -22,29 +28,62 @@ void USTUWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-SpawnWeapon();
-	
+	SpawnWeapons();
+	EquipWeapon(IndexWeapon);
 }
 
-void USTUWeaponComponent::SpawnWeapon()
+void USTUWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	CurrentWeapon = nullptr;
+	for (auto Weapon : Weapons)
+	{
+		Weapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		Weapon->Destroy();
+	}
+	Weapons.Empty();
+	Super::EndPlay(EndPlayReason);
+}
+
+void USTUWeaponComponent::SpawnWeapons()
 {
 	UWorld* World = GetWorld();
-	if (World)
+	ASTUCharacter* Char = Cast<ASTUCharacter>(GetOwner());
+	if (World && Char)
 	{
-		ASTUCharacter* Char = Cast<ASTUCharacter>(GetOwner());
-		if(Char)
+		for(auto WeaponInst : WeaponClasses)
 		{
-			if(WeaponClass)
+			 ASTUBaseWeapon* SpawndedWeapon = World->SpawnActor<ASTUBaseWeapon>(WeaponInst);
+			if(SpawndedWeapon)
 			{
-				 CurrentWeapon= World->SpawnActor<ASTUBaseWeapon>(WeaponClass);
-				if(CurrentWeapon)
-				{
-					const FAttachmentTransformRules AttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
-					CurrentWeapon->AttachToComponent(Char->GetMesh(),AttachmentTransformRules,SocketName);
-					CurrentWeapon->SetOwner(Char);
-				}
+				SpawndedWeapon->SetOwner(GetOwner());
+				Weapons.Add(SpawndedWeapon);
+				AttachWeaponToSocket(SpawndedWeapon, Char->GetMesh(), SocketWeaponArmoryName);
 			}
 		}
+	}
+}
+
+void USTUWeaponComponent::AttachWeaponToSocket(ASTUBaseWeapon* Weapon,USceneComponent* SceneComponent,const FName& SocketName)
+{
+	if (!Weapon || !SceneComponent) return;
+	const FAttachmentTransformRules AttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
+	Weapon->AttachToComponent(SceneComponent, AttachmentTransformRules, SocketName);
+}
+
+void USTUWeaponComponent::EquipWeapon(int32 Index)
+{
+	ASTUCharacter* Char = Cast<ASTUCharacter>(GetOwner());
+	if (!Char) return;
+	
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->StopFireWeapon();
+		AttachWeaponToSocket(CurrentWeapon, Char->GetMesh(), SocketWeaponArmoryName);
+	}
+	CurrentWeapon = Weapons[Index];
+	if (CurrentWeapon)
+	{
+		AttachWeaponToSocket(CurrentWeapon, Char->GetMesh(), SocketWeaponEquipName);
 	}
 }
 
@@ -62,4 +101,10 @@ void USTUWeaponComponent::StopFire()
 	{
 		CurrentWeapon->StopFireWeapon();
 	}
+}
+
+void USTUWeaponComponent::NextWeapon()
+{
+	IndexWeapon = (IndexWeapon + 1) % Weapons.Num();
+	EquipWeapon(IndexWeapon);
 }

@@ -13,5 +13,29 @@ UCLASS()
 class SHOOTTHEMUP_API ASTUPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+
+public:
+	//test
+	ASTUPlayerController();
+
+	//test
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	//test
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	//test
+	UPROPERTY()
+	class ASTUBaseWeapon* WeaponChar;
 	
+	//test
+	UPROPERTY()
+		TArray<ASTUBaseWeapon*> TArratWeaponChar;
+
+	//test
+	UFUNCTION(BlueprintCallable)
+	void TestVariables();
 };

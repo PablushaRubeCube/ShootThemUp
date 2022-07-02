@@ -12,6 +12,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Controller.h"
 #include "Components/CapsuleComponent.h"
+//test
+#include "Weapon/STUBaseWeapon.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogCharacter,All,All)
 
@@ -96,6 +98,8 @@ void ASTUCharacter::DeathChar()
 	if (Controller) Controller->ChangeState(NAME_Spectating);
 
 	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+
+	WeaponComponent->StopFire();
 }
 
 void ASTUCharacter::OnChangeHealth(float Health)
@@ -130,6 +134,8 @@ void ASTUCharacter::BeginPlay()
 	HealthComponent->OnDeath.AddUObject(this,&ASTUCharacter::DeathChar);
 	HealthComponent->OnChangeHealth.AddUObject(this, &ASTUCharacter::OnChangeHealth);
 	LandedDelegate.AddDynamic(this, &ASTUAICharacter::OnGroudLanded);
+
+
 }
 
 
@@ -162,4 +168,16 @@ void ASTUCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	PlayerInputComponent->BindAction("Fire",IE_Pressed, WeaponComponent, &USTUWeaponComponent::StartFire);
 	PlayerInputComponent->BindAction("Fire",IE_Released, WeaponComponent, &USTUWeaponComponent::StopFire);
+
+	PlayerInputComponent->BindAction("NextWeapon", IE_Pressed, WeaponComponent, &USTUWeaponComponent::NextWeapon);
+}
+
+void ASTUCharacter::TransferTestVariables(ASTUBaseWeapon* Weapon,TArray<ASTUBaseWeapon*> Weapons)
+{
+	if (WeaponComponent)
+	{
+		Weapon = WeaponComponent->CurrentWeapon;
+		Weapons = WeaponComponent->Weapons;
+
+	}
 }
