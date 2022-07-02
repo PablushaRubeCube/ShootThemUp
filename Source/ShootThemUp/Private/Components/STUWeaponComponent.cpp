@@ -5,6 +5,7 @@
 
 #include "Player/STUCharacter.h"
 #include "Weapon/STUBaseWeapon.h"
+#include "Animations/STUEquipWeaponAnimNotify.h"
 
 DEFINE_LOG_CATEGORY_STATIC(STUWeaponComponent, All, All)
 
@@ -29,6 +30,7 @@ void USTUWeaponComponent::BeginPlay()
 	Super::BeginPlay();
 
 	SpawnWeapons();
+	InitialAnimation();
 	EquipWeapon(IndexWeapon);
 }
 
@@ -84,6 +86,39 @@ void USTUWeaponComponent::EquipWeapon(int32 Index)
 	if (CurrentWeapon)
 	{
 		AttachWeaponToSocket(CurrentWeapon, Char->GetMesh(), SocketWeaponEquipName);
+	}
+	WeaponMontageAnimation(EquipMotage);
+}
+
+void USTUWeaponComponent::WeaponMontageAnimation(UAnimMontage* Montage)
+{
+	ASTUCharacter* Char = Cast<ASTUCharacter>(GetOwner());
+	if (!Char) return;
+
+	Char->PlayAnimMontage(Montage);
+}
+
+void USTUWeaponComponent::InitialAnimation()
+{
+	const auto Notifies = EquipMotage->Notifies;
+	for (auto NotifyInst : Notifies)
+	{
+		USTUEquipWeaponAnimNotify* CurrentNotify = Cast<USTUEquipWeaponAnimNotify>(NotifyInst.Notify);
+		if (CurrentNotify)
+		{
+			CurrentNotify->OnNotifyCall.AddUObject(this, &USTUWeaponComponent::OnFinishEquip);
+			break;
+		}
+	}
+}
+
+void USTUWeaponComponent::OnFinishEquip(USkeletalMeshComponent* SkeletalMesh)
+{
+	ASTUCharacter* Char = Cast<ASTUCharacter>(GetOwner());
+	if (!Char) return;
+	if (Char->GetMesh() == SkeletalMesh)
+	{
+		UE_LOG(STUWeaponComponent, Warning, TEXT("EquipFinish"));
 	}
 }
 

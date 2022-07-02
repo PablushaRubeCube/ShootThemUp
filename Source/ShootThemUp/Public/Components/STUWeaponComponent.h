@@ -21,7 +21,11 @@ private://variables
 	UPROPERTY(EditAnywhere, Category= Weapon, meta=(AllowPrivateAccess = "true"))
 	TArray<TSubclassOf<class ASTUBaseWeapon>> WeaponClasses;
 
+	UPROPERTY()
+		ASTUBaseWeapon* CurrentWeapon = nullptr;
 
+	UPROPERTY()
+		TArray<ASTUBaseWeapon*> Weapons;
 
 	UPROPERTY(EditAnywhere, Category= "Weapon", meta=(AllowPrivateAccess = "true"))
 	FName SocketWeaponEquipName;
@@ -31,12 +35,25 @@ private://variables
 
 	int32 IndexWeapon;
 
+	//Equip animation montage
+	UPROPERTY(EditDefaultsOnly, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+	class UAnimMontage* EquipMotage;
+
 private://functions
 	void SpawnWeapons();
 
 	void AttachWeaponToSocket(ASTUBaseWeapon* Weapon, USceneComponent* SceneComponent, const FName& SocketName);
 
 	void EquipWeapon(int32 Index);
+
+	//functions for call anim montage
+	void WeaponMontageAnimation(UAnimMontage* Montage);
+
+	//Subscrube to anim notify STUEquipWeaponAnimNotify
+	void InitialAnimation();
+
+	//
+	void OnFinishEquip(USkeletalMeshComponent* SkeletalMesh);
 
 protected:
 	// Called when the game starts
@@ -50,10 +67,4 @@ public://functions
 		
 	void NextWeapon();
 
-
-	UPROPERTY()
-		ASTUBaseWeapon* CurrentWeapon = nullptr;
-
-	UPROPERTY()
-		TArray<ASTUBaseWeapon*> Weapons;
 };

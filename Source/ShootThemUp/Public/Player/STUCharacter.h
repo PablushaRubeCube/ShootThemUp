@@ -88,9 +88,6 @@ public:	// functions
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
-	//test
-	void TransferTestVariables(class ASTUBaseWeapon* Weapon, TArray<ASTUBaseWeapon*> Weapons);
 };
 
 
