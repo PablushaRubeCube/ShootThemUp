@@ -11,7 +11,8 @@ DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon,All,All)
 
 // Sets default values
 ASTUBaseWeapon::ASTUBaseWeapon():
-MaxShotDistance(1500.f)
+MaxShotDistance(1500.f),
+DefaultAmmo{30,3,true}
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -29,6 +30,8 @@ void ASTUBaseWeapon::BeginPlay()
 	Super::BeginPlay();
 
 	check(WeaponMeshComponent);
+
+	CurrentAmmo = DefaultAmmo;
 	
 }
 
@@ -98,6 +101,45 @@ void ASTUBaseWeapon::MakeHit(const UWorld* World, FHitResult& HitResult,const FV
 	CollisionParameters.AddIgnoredActor(GetOwner());
 	
 	GetWorld()->LineTraceSingleByChannel(HitResult,StartTrace,EndTrace,ECollisionChannel::ECC_Visibility,CollisionParameters);
+}
+
+void ASTUBaseWeapon::DecreaseBullet()
+{
+	CurrentAmmo.Bullet--;
+	LogAmmoInfo();
+
+	if (ClipEmpty() && !AmmoEmpty())
+	{
+		ReloadClip();
+	}
+}
+
+void ASTUBaseWeapon::ReloadClip()
+{
+	UE_LOG(LogBaseWeapon, Warning, TEXT("__RELOAD__"));
+	CurrentAmmo.Bullet = DefaultAmmo.Bullet;
+	if (!CurrentAmmo.bHasInfinityAmmo)
+	{
+		CurrentAmmo.Clips--;
+	}
+}
+
+bool ASTUBaseWeapon::ClipEmpty() const
+{
+	return CurrentAmmo.Bullet == 0;
+}
+
+bool ASTUBaseWeapon::AmmoEmpty() const
+{
+	return !CurrentAmmo.bHasInfinityAmmo && CurrentAmmo.Clips == 0 && ClipEmpty();
+}
+
+void ASTUBaseWeapon::LogAmmoInfo()
+{
+	FString Log = "Bullet" + FString::FromInt(CurrentAmmo.Bullet) + " / ";
+	Log += "Clips" + FString::FromInt(CurrentAmmo.Clips);
+
+	UE_LOG(LogBaseWeapon, Warning, TEXT("%s"), *Log);
 }
 
 

@@ -8,11 +8,19 @@
 
 void ASTULauncherWeapon::MakeShot()
 {
-	if (!GetWorld()) return;
+	if (!GetWorld() || AmmoEmpty())
+	{
+		StopFireWeapon();
+		return;
+	}
 	
 	FVector StartTrace;
 	FVector EndTrace;
-	if (!GetTraceData(StartTrace, EndTrace))return;
+	if (!GetTraceData(StartTrace, EndTrace))
+	{
+		StopFireWeapon();
+		return;
+	}
 
 	FHitResult HitResult;
 	MakeHit(GetWorld(), HitResult, StartTrace, EndTrace);
@@ -33,6 +41,7 @@ void ASTULauncherWeapon::MakeShot()
 			SpawnedProjectile->FinishSpawning(SpawnTransform);
 		}
 	}
+	DecreaseBullet();
 }
 
 

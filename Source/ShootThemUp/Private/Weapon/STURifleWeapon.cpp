@@ -26,31 +26,38 @@ void ASTURifleWeapon::StopFireWeapon()
 
 void ASTURifleWeapon::MakeShot()
 {
-	UWorld* World = GetWorld();
-	if (World)
+	if (!GetWorld() || AmmoEmpty())
 	{
-		FVector StartTrace;
-		FVector EndTrace;
-		if (!GetTraceData(StartTrace, EndTrace))return;
-
-		FHitResult HitResult;
-		MakeHit(World, HitResult, StartTrace, EndTrace);
-
-		if (HitResult.bBlockingHit)
-		{
-			ASTUCharacter* HitChar = Cast<ASTUCharacter>(HitResult.Actor);
-			if (HitChar)
-			{
-				MakeDamage(HitResult);
-			}
-			DrawDebugSphere(World, HitResult.ImpactPoint, 3.f, 10, FColor::Red, false, 3.f, 0.f, 3.f);
-			DrawDebugLine(World, GetMuzzleLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.f, 0, 3.f);
-		}
-		else
-		{
-			DrawDebugLine(World, GetMuzzleLocation(), EndTrace, FColor::Red, false, 3.f, 0, 3.f);
-		}
+		StopFireWeapon();
+		return;
 	}
+	
+	FVector StartTrace;
+	FVector EndTrace;
+	if (!GetTraceData(StartTrace, EndTrace))
+	{
+		StopFireWeapon();
+		return;
+	}
+	FHitResult HitResult;
+	MakeHit(GetWorld(), HitResult, StartTrace, EndTrace);
+
+	if (HitResult.bBlockingHit)
+	{
+		ASTUCharacter* HitChar = Cast<ASTUCharacter>(HitResult.Actor);
+		if (HitChar)
+		{
+			MakeDamage(HitResult);
+		}
+		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 3.f, 10, FColor::Red, false, 3.f, 0.f, 3.f);
+		DrawDebugLine(GetWorld(), GetMuzzleLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.f, 0, 3.f);
+	}
+	else
+	{
+		DrawDebugLine(GetWorld(), GetMuzzleLocation(), EndTrace, FColor::Red, false, 3.f, 0, 3.f);
+	}
+	
+	DecreaseBullet();
 }
 
 bool ASTURifleWeapon::GetTraceData(FVector& StartTrace, FVector& EndTrace) const

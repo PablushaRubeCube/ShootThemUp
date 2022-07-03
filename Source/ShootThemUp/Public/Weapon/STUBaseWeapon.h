@@ -6,6 +6,21 @@
 #include "GameFramework/Actor.h"
 #include "STUBaseWeapon.generated.h"
 
+USTRUCT(BlueprintType)
+struct FAmmoWeapon
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	int32 Bullet;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (EditCondition = "!bHasInfinityAmmo"))
+	int32 Clips;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	bool bHasInfinityAmmo;
+};
+
 UCLASS()
 class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
 {
@@ -16,9 +31,9 @@ public:
 	ASTUBaseWeapon();
 
 
-private://functions
+private://Variables
 
-
+	FAmmoWeapon CurrentAmmo;
 
 protected://variables
 
@@ -32,11 +47,28 @@ protected://variables
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	FName SocketName = "MuzzleFlashSocket";
 
-
+	//skeletal mesh our weapon
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+	FAmmoWeapon DefaultAmmo;
 
 protected://functions
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	//Decrase bullet when we shoot
+	void DecreaseBullet();
+
+	//call we reloaded
+	void ReloadClip();
+
+	// call to relload weapon
+	bool ClipEmpty() const;
+
+	//return true if we dont have bullet
+	bool AmmoEmpty() const;
+
+	//temp log for ammo
+	void LogAmmoInfo();
 
 public:	//functions
 	virtual	void StartFireWeapon();
@@ -48,7 +80,5 @@ public:	//functions
 	FVector GetMuzzleLocation() const;
 	virtual bool GetTraceData(FVector& StartTrace, FVector& EndTrace)  const;
 	void MakeHit(const UWorld* World, FHitResult& HitResult, const FVector& StartTrace, const FVector& EndTrace) const;
-
-	
 
 };

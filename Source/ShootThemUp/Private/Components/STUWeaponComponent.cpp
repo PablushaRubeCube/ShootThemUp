@@ -14,7 +14,8 @@ USTUWeaponComponent::USTUWeaponComponent():
 SocketWeaponEquipName("WeaponEquipPoint"),
 SocketWeaponArmoryName("WeaponArmoryPoint"),
 IndexWeapon(0),
-CurrentWeapon(nullptr)
+CurrentWeapon(nullptr),
+bEquipInProgress(false)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -52,9 +53,9 @@ void USTUWeaponComponent::SpawnWeapons()
 	ASTUCharacter* Char = Cast<ASTUCharacter>(GetOwner());
 	if (World && Char)
 	{
-		for(auto WeaponInst : WeaponClasses)
+		for(auto WeaponTypeInst : WeaponType)
 		{
-			 ASTUBaseWeapon* SpawndedWeapon = World->SpawnActor<ASTUBaseWeapon>(WeaponInst);
+		 ASTUBaseWeapon* SpawndedWeapon = World->SpawnActor<ASTUBaseWeapon>(WeaponTypeInst.WeaponClass);
 			if(SpawndedWeapon)
 			{
 				SpawndedWeapon->SetOwner(GetOwner());
@@ -74,6 +75,12 @@ void USTUWeaponComponent::AttachWeaponToSocket(ASTUBaseWeapon* Weapon,USceneComp
 
 void USTUWeaponComponent::EquipWeapon(int32 Index)
 {
+	if (Index < 0 || Index >= Weapons.Num())
+	{
+		UE_LOG(STUWeaponComponent, Warning, TEXT("Invalid Index"))
+		return;
+	}
+
 	ASTUCharacter* Char = Cast<ASTUCharacter>(GetOwner());
 	if (!Char) return;
 	
@@ -83,11 +90,19 @@ void USTUWeaponComponent::EquipWeapon(int32 Index)
 		AttachWeaponToSocket(CurrentWeapon, Char->GetMesh(), SocketWeaponArmoryName);
 	}
 	CurrentWeapon = Weapons[Index];
+
+	const auto WeaponData =
+	WeaponType.FindByPredicate([&](const FWeaponType& Data)
+	{ return Data.WeaponClass == CurrentWeapon->GetClass(); });
+	CurrentReloadMontage = WeaponData ? WeaponData->ReloadMontage : nullptr;
+
 	if (CurrentWeapon)
 	{
 		AttachWeaponToSocket(CurrentWeapon, Char->GetMesh(), SocketWeaponEquipName);
 	}
-	WeaponMontageAnimation(EquipMotage);
+	WeaponMontageAnimation(EquipMontage);
+	bEquipInProgress = true;
+
 }
 
 void USTUWeaponComponent::WeaponMontageAnimation(UAnimMontage* Montage)
@@ -100,7 +115,7 @@ void USTUWeaponComponent::WeaponMontageAnimation(UAnimMontage* Montage)
 
 void USTUWeaponComponent::InitialAnimation()
 {
-	const auto Notifies = EquipMotage->Notifies;
+	const auto Notifies = EquipMontage->Notifies;
 	for (auto NotifyInst : Notifies)
 	{
 		USTUEquipWeaponAnimNotify* CurrentNotify = Cast<USTUEquipWeaponAnimNotify>(NotifyInst.Notify);
@@ -115,16 +130,14 @@ void USTUWeaponComponent::InitialAnimation()
 void USTUWeaponComponent::OnFinishEquip(USkeletalMeshComponent* SkeletalMesh)
 {
 	ASTUCharacter* Char = Cast<ASTUCharacter>(GetOwner());
-	if (!Char) return;
-	if (Char->GetMesh() == SkeletalMesh)
-	{
-		UE_LOG(STUWeaponComponent, Warning, TEXT("EquipFinish"));
-	}
+	if (!Char || (Char->GetMesh() != SkeletalMesh)) return;
+	
+	bEquipInProgress = false;
 }
 
 void USTUWeaponComponent::StartFire()
 {
-	if(CurrentWeapon)
+	if(IsCanFire())
 	{
 		CurrentWeapon->StartFireWeapon();
 	}
@@ -140,6 +153,17 @@ void USTUWeaponComponent::StopFire()
 
 void USTUWeaponComponent::NextWeapon()
 {
+	if (IsEquipInProgress()) return;
 	IndexWeapon = (IndexWeapon + 1) % Weapons.Num();
 	EquipWeapon(IndexWeapon);
+}
+
+bool USTUWeaponComponent::IsCanFire() const
+{
+	return (CurrentWeapon && !IsEquipInProgress());
+}
+
+void USTUWeaponComponent::Reload() 
+{
+	WeaponMontageAnimation(CurrentReloadMontage);
 }

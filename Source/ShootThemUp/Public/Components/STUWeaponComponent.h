@@ -6,6 +6,20 @@
 #include "Components/ActorComponent.h"
 #include "STUWeaponComponent.generated.h"
 
+USTRUCT(BlueprintType)
+struct FWeaponType
+{
+	GENERATED_BODY()
+
+	//Choose weapon
+	UPROPERTY(EditDefaultsOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class ASTUBaseWeapon> WeaponClass;
+
+	//Choose reload animation montage
+	UPROPERTY(EditDefaultsOnly, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+	class UAnimMontage* ReloadMontage;
+};
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SHOOTTHEMUP_API USTUWeaponComponent : public UActorComponent
@@ -17,9 +31,6 @@ public://constructor
 	USTUWeaponComponent();
 
 private://variables
-
-	UPROPERTY(EditAnywhere, Category= Weapon, meta=(AllowPrivateAccess = "true"))
-	TArray<TSubclassOf<class ASTUBaseWeapon>> WeaponClasses;
 
 	UPROPERTY()
 		ASTUBaseWeapon* CurrentWeapon = nullptr;
@@ -37,7 +48,18 @@ private://variables
 
 	//Equip animation montage
 	UPROPERTY(EditDefaultsOnly, Category = "Animations", meta = (AllowPrivateAccess = "true"))
-	class UAnimMontage* EquipMotage;
+	class UAnimMontage* EquipMontage;
+
+	//true if we changed weapon
+	bool bEquipInProgress;
+
+	//Tarray struct weapons and reload montage
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
+	TArray<FWeaponType> WeaponType;
+
+	//Equip animation montage
+	UPROPERTY(VisibleAnywhere, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* CurrentReloadMontage;
 
 private://functions
 	void SpawnWeapons();
@@ -66,5 +88,11 @@ public://functions
 	void StopFire();
 		
 	void NextWeapon();
+
+	FORCEINLINE bool IsEquipInProgress() const { return bEquipInProgress; }
+
+	bool IsCanFire() const;
+
+	void Reload();
 
 };
