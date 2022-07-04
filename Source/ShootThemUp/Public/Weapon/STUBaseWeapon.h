@@ -4,22 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "STUCoreTypes.h"
 #include "STUBaseWeapon.generated.h"
 
-USTRUCT(BlueprintType)
-struct FAmmoWeapon
-{
-	GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-	int32 Bullet;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (EditCondition = "!bHasInfinityAmmo"))
-	int32 Clips;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-	bool bHasInfinityAmmo;
-};
 
 UCLASS()
 class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
@@ -58,9 +47,6 @@ protected://functions
 	//Decrase bullet when we shoot
 	void DecreaseBullet();
 
-	//call we reloaded
-	void ReloadClip();
-
 	// call to relload weapon
 	bool ClipEmpty() const;
 
@@ -69,6 +55,7 @@ protected://functions
 
 	//temp log for ammo
 	void LogAmmoInfo();
+
 
 public:	//functions
 	virtual	void StartFireWeapon();
@@ -80,5 +67,13 @@ public:	//functions
 	FVector GetMuzzleLocation() const;
 	virtual bool GetTraceData(FVector& StartTrace, FVector& EndTrace)  const;
 	void MakeHit(const UWorld* World, FHitResult& HitResult, const FVector& StartTrace, const FVector& EndTrace) const;
+
+	//Call when we need reload
+	FOnReloadSignature OnReloadSignature;
+
+	//call we reloaded
+	void ReloadClip();
+
+	bool IsWeaponCanReload();
 
 };

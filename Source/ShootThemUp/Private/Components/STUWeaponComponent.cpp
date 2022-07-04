@@ -6,8 +6,10 @@
 #include "Player/STUCharacter.h"
 #include "Weapon/STUBaseWeapon.h"
 #include "Animations/STUEquipWeaponAnimNotify.h"
+#include "Animations/STUReloadFinishedAnimNotify.h"
+#include "Animations/AnimUtils.h"
 
-DEFINE_LOG_CATEGORY_STATIC(STUWeaponComponent, All, All)
+DEFINE_LOG_CATEGORY_STATIC(LOGSTUWeaponComponent, All, All)
 
 // Sets default values for this component's properties
 USTUWeaponComponent::USTUWeaponComponent():
@@ -15,7 +17,8 @@ SocketWeaponEquipName("WeaponEquipPoint"),
 SocketWeaponArmoryName("WeaponArmoryPoint"),
 IndexWeapon(0),
 CurrentWeapon(nullptr),
-bEquipInProgress(false)
+bEquipInProgress(false),
+bReloadInProgress(false)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -61,6 +64,7 @@ void USTUWeaponComponent::SpawnWeapons()
 				SpawndedWeapon->SetOwner(GetOwner());
 				Weapons.Add(SpawndedWeapon);
 				AttachWeaponToSocket(SpawndedWeapon, Char->GetMesh(), SocketWeaponArmoryName);
+				SpawndedWeapon->OnReloadSignature.AddUObject(this, &USTUWeaponComponent::ClipIsEmpty);
 			}
 		}
 	}
@@ -77,7 +81,7 @@ void USTUWeaponComponent::EquipWeapon(int32 Index)
 {
 	if (Index < 0 || Index >= Weapons.Num())
 	{
-		UE_LOG(STUWeaponComponent, Warning, TEXT("Invalid Index"))
+		UE_LOG(LOGSTUWeaponComponent, Warning, TEXT("Invalid Index EquipWeapon"))
 		return;
 	}
 
@@ -115,16 +119,26 @@ void USTUWeaponComponent::WeaponMontageAnimation(UAnimMontage* Montage)
 
 void USTUWeaponComponent::InitialAnimation()
 {
-	const auto Notifies = EquipMontage->Notifies;
-	for (auto NotifyInst : Notifies)
-	{
-		USTUEquipWeaponAnimNotify* CurrentNotify = Cast<USTUEquipWeaponAnimNotify>(NotifyInst.Notify);
-		if (CurrentNotify)
+		auto CurrentEquipNotify = AnimUtils::FindNotifyByClass<USTUEquipWeaponAnimNotify>(EquipMontage);
+		if (CurrentEquipNotify)
 		{
-			CurrentNotify->OnNotifyCall.AddUObject(this, &USTUWeaponComponent::OnFinishEquip);
-			break;
+			CurrentEquipNotify->OnNotifyCall.AddUObject(this, &USTUWeaponComponent::OnFinishEquip);
 		}
-	}
+		else
+		{
+			UE_LOG(LOGSTUWeaponComponent, Warning, TEXT("Notify don't find"));
+		}
+
+		for (auto CurrentWeaponType : WeaponType) 
+		{
+			auto CurrentReloadNotify = AnimUtils::FindNotifyByClass<USTUReloadFinishedAnimNotify>(CurrentWeaponType.ReloadMontage);
+			if (!CurrentReloadNotify)
+			{
+				UE_LOG(LOGSTUWeaponComponent, Warning, TEXT("Notify don't find"));
+			}
+			CurrentReloadNotify->OnNotifyCall.AddUObject(this, &USTUWeaponComponent::OnFinishReload);
+		}
+		
 }
 
 void USTUWeaponComponent::OnFinishEquip(USkeletalMeshComponent* SkeletalMesh)
@@ -133,6 +147,14 @@ void USTUWeaponComponent::OnFinishEquip(USkeletalMeshComponent* SkeletalMesh)
 	if (!Char || (Char->GetMesh() != SkeletalMesh)) return;
 	
 	bEquipInProgress = false;
+}
+
+void USTUWeaponComponent::OnFinishReload(USkeletalMeshComponent* SkeletalMesh)
+{
+	ASTUCharacter* Char = Cast<ASTUCharacter>(GetOwner());
+	if (!Char || (Char->GetMesh() != SkeletalMesh)) return;
+
+	bReloadInProgress = false;
 }
 
 void USTUWeaponComponent::StartFire()
@@ -160,10 +182,30 @@ void USTUWeaponComponent::NextWeapon()
 
 bool USTUWeaponComponent::IsCanFire() const
 {
-	return (CurrentWeapon && !IsEquipInProgress());
+	return (CurrentWeapon && !IsEquipInProgress() && !IsReloadInProgress());
+}
+
+bool USTUWeaponComponent::IsCanReload() const
+{
+	return (CurrentWeapon && !IsEquipInProgress() && !IsReloadInProgress() && CurrentWeapon->IsWeaponCanReload());
 }
 
 void USTUWeaponComponent::Reload() 
 {
+	ChangeClip();
+}
+
+void USTUWeaponComponent::ClipIsEmpty()
+{
+	ChangeClip();
+}
+
+void USTUWeaponComponent::ChangeClip()
+{
+	if (!IsCanReload())return;
+	bReloadInProgress = true;
+	CurrentWeapon->ReloadClip();
+	CurrentWeapon->StopFireWeapon();
 	WeaponMontageAnimation(CurrentReloadMontage);
+	
 }

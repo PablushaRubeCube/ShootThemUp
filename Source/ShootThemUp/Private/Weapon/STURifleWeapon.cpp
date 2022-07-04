@@ -15,8 +15,8 @@ void ASTURifleWeapon::MakeDamage(const FHitResult& Result)
 
 void ASTURifleWeapon::StartFireWeapon()
 {
-	MakeShot();
 	GetWorldTimerManager().SetTimer(ShootTimer, this, &ASTURifleWeapon::MakeShot, FireRate, true);
+	MakeShot();
 }
 
 void ASTURifleWeapon::StopFireWeapon()

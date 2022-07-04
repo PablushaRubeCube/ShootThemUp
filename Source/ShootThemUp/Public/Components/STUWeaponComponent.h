@@ -4,21 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "STUCoreTypes.h"
 #include "STUWeaponComponent.generated.h"
-
-USTRUCT(BlueprintType)
-struct FWeaponType
-{
-	GENERATED_BODY()
-
-	//Choose weapon
-	UPROPERTY(EditDefaultsOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class ASTUBaseWeapon> WeaponClass;
-
-	//Choose reload animation montage
-	UPROPERTY(EditDefaultsOnly, Category = "Animations", meta = (AllowPrivateAccess = "true"))
-	class UAnimMontage* ReloadMontage;
-};
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -33,10 +20,10 @@ public://constructor
 private://variables
 
 	UPROPERTY()
-		ASTUBaseWeapon* CurrentWeapon = nullptr;
+	ASTUBaseWeapon* CurrentWeapon = nullptr;
 
 	UPROPERTY()
-		TArray<ASTUBaseWeapon*> Weapons;
+	TArray<ASTUBaseWeapon*> Weapons;
 
 	UPROPERTY(EditAnywhere, Category= "Weapon", meta=(AllowPrivateAccess = "true"))
 	FName SocketWeaponEquipName;
@@ -51,7 +38,12 @@ private://variables
 	class UAnimMontage* EquipMontage;
 
 	//true if we changed weapon
+	UPROPERTY(VisibleAnywhere, Category = "Animations", meta = (AllowPrivateAccess = "true"))
 	bool bEquipInProgress;
+
+	//true if we changed weapon
+	UPROPERTY(VisibleAnywhere, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+	bool bReloadInProgress;
 
 	//Tarray struct weapons and reload montage
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
@@ -77,6 +69,14 @@ private://functions
 	//
 	void OnFinishEquip(USkeletalMeshComponent* SkeletalMesh);
 
+	void OnFinishReload(USkeletalMeshComponent* SkeletalMesh);
+
+	//Call when we want change clip
+	void ChangeClip();
+
+	//call automaticly when we dont have bullets in clip
+	void ClipIsEmpty();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -91,8 +91,15 @@ public://functions
 
 	FORCEINLINE bool IsEquipInProgress() const { return bEquipInProgress; }
 
+	FORCEINLINE bool IsReloadInProgress() const { return bReloadInProgress; }
+
 	bool IsCanFire() const;
+
+	bool IsCanReload() const;
 
 	void Reload();
 
+
+
 };
+

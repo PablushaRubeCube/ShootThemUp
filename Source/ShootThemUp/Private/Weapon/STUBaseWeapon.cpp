@@ -110,18 +110,23 @@ void ASTUBaseWeapon::DecreaseBullet()
 
 	if (ClipEmpty() && !AmmoEmpty())
 	{
-		ReloadClip();
+		StopFireWeapon();
+		OnReloadSignature.Broadcast();
 	}
 }
 
 void ASTUBaseWeapon::ReloadClip()
 {
-	UE_LOG(LogBaseWeapon, Warning, TEXT("__RELOAD__"));
-	CurrentAmmo.Bullet = DefaultAmmo.Bullet;
 	if (!CurrentAmmo.bHasInfinityAmmo)
 	{
+		if (CurrentAmmo.Clips == 0)
+		{
+			UE_LOG(LogBaseWeapon, Warning, TEXT("Dont have clips"));
+				return;
+		}
 		CurrentAmmo.Clips--;
 	}
+	CurrentAmmo.Bullet = DefaultAmmo.Bullet;
 }
 
 bool ASTUBaseWeapon::ClipEmpty() const
@@ -140,6 +145,11 @@ void ASTUBaseWeapon::LogAmmoInfo()
 	Log += "Clips" + FString::FromInt(CurrentAmmo.Clips);
 
 	UE_LOG(LogBaseWeapon, Warning, TEXT("%s"), *Log);
+}
+
+bool ASTUBaseWeapon::IsWeaponCanReload()
+{
+	return CurrentAmmo.Bullet < DefaultAmmo.Bullet && CurrentAmmo.Clips > 0;
 }
 
 

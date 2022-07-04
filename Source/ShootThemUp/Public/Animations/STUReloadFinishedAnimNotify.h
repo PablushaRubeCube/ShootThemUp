@@ -4,15 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Animations/STUAnimNotify.h"
-#include "STUEquipWeaponAnimNotify.generated.h"
+#include "STUReloadFinishedAnimNotify.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SHOOTTHEMUP_API USTUEquipWeaponAnimNotify : public USTUAnimNotify
+class SHOOTTHEMUP_API USTUReloadFinishedAnimNotify : public USTUAnimNotify
 {
 	GENERATED_BODY()
-
-
+	
 };
