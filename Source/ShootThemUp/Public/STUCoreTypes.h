@@ -28,14 +28,14 @@ struct FAmmoWeapon
 {
 	GENERATED_BODY()
 
-		UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (ClampMin = "1"));
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (ClampMin = "1"));
 	int32 Bullet;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (EditCondition = "!bHasInfinityAmmo", ClampMin = "0"))
-		int32 Clips;
+	int32 Clips;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-		bool bHasInfinityAmmo;
+	bool bHasInfinityAmmo;
 };
 
 //Health
