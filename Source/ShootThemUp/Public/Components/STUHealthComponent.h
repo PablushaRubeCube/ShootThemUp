@@ -70,4 +70,7 @@ public://functions
 	FORCEINLINE int32 GetHealth()const {return Health;}
 
 	FORCEINLINE bool ISDead() const {return FMath::IsNearlyZero(Health); }
+
+	//return percent of health in for widget
+	FORCEINLINE float GetHealthPercentage() const { return Health / MaxHealth; }
 };

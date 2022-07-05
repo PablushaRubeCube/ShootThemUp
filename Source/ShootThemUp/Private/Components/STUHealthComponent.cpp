@@ -29,6 +29,8 @@ void USTUHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	check(MaxHealth > 0);
+
 	GetOwner()->OnTakeAnyDamage.AddDynamic(this,&USTUHealthComponent::OnTakeAnyDamageHandle);
 	
 	SetHealth(MaxHealth);

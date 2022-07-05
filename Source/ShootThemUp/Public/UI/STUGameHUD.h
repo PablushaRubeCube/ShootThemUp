@@ -14,9 +14,21 @@ class SHOOTTHEMUP_API ASTUGameHUD : public AHUD
 {
 	GENERATED_BODY()
 
-		private://functions
-		virtual void DrawHUD()override;
+private://variables
 
-		void DrawCrossHud();
+	UPROPERTY(EditDefaultsOnly, Category = "Player", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class UUserWidget> PlayerHudWidget;
+
+private://functions
+
+	virtual void DrawHUD()override;
+
+	void DrawCrossHud();
+
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
+
+
 	
 };

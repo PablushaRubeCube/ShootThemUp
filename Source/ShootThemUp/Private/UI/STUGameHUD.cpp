@@ -3,6 +3,7 @@
 
 #include "UI/STUGameHUD.h"
 #include "Engine/Canvas.h"
+#include "Blueprint/UserWidget.h"
 
 void ASTUGameHUD::DrawHUD()
 {
@@ -22,4 +23,18 @@ void ASTUGameHUD::DrawCrossHud()
 
 	DrawLine(Center.Min - Inded, Center.Max, Center.Min + Inded, Center.Max, ColorCross, Thickness);
 	DrawLine(Center.Min, Center.Max - Inded, Center.Min, Center.Max + Inded, ColorCross, Thickness);
+}
+
+void ASTUGameHUD::BeginPlay()
+{
+	Super::BeginPlay();
+
+	check(PlayerHudWidget);
+
+	auto Widget = CreateWidget<UUserWidget>(GetWorld(), PlayerHudWidget);
+	if (Widget)
+	{
+		Widget->AddToViewport();
+	}
+
 }
