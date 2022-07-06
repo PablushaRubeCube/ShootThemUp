@@ -40,6 +40,10 @@ protected://variables
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	FAmmoWeapon DefaultAmmo;
 
+	//SetIcons for weapon
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Icon")
+	FDataWeaponUI DataWeaponUI;
+
 protected://functions
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -55,6 +59,8 @@ protected://functions
 
 	//temp log for ammo
 	void LogAmmoInfo();
+
+	bool IsAmmoFull();
 
 
 public:	//functions
@@ -75,5 +81,13 @@ public:	//functions
 	void ReloadClip();
 
 	bool IsWeaponCanReload();
+
+	//Return Icons Data
+	FORCEINLINE FDataWeaponUI GetDataWeaponUI() const { return DataWeaponUI; }
+
+	//Return Bullets and clips data
+	FORCEINLINE FAmmoWeapon GetDataWeaponAmmo() const { return CurrentAmmo; }
+
+	bool TryToAddAmmo(int32 Clips);
 
 };

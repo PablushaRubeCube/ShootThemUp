@@ -20,7 +20,7 @@ public://constructor
 private://variables
 
 	UPROPERTY()
-	ASTUBaseWeapon* CurrentWeapon = nullptr;
+	class ASTUBaseWeapon* CurrentWeapon = nullptr;
 
 	UPROPERTY()
 	TArray<ASTUBaseWeapon*> Weapons;
@@ -75,7 +75,7 @@ private://functions
 	void ChangeClip();
 
 	//call automaticly when we dont have bullets in clip
-	void ClipIsEmpty();
+	void ClipIsEmpty(ASTUBaseWeapon* AmmoEmptyWeapon);
 
 protected:
 	// Called when the game starts
@@ -99,7 +99,12 @@ public://functions
 
 	void Reload();
 
+	//Return Current Icon Data
+	bool GetCurrentDataWeaponUI(FDataWeaponUI& Data) const;
 
+	//Return Current Ammo Data
+	bool GetCurrentDataAmmo(FAmmoWeapon& Data) const;
 
+	bool TryToAddAmmo(TSubclassOf<ASTUBaseWeapon> Weapon, int32 Clips);
 };
 

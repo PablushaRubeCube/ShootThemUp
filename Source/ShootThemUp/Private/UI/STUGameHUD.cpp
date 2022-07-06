@@ -9,7 +9,7 @@ void ASTUGameHUD::DrawHUD()
 {
 	Super::DrawHUD();
 
-	DrawCrossHud();
+//	DrawCrossHud();
 }
 
 void ASTUGameHUD::DrawCrossHud()

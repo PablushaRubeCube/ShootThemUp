@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "STUCoreTypes.h"
 #include "STUPlayerHUDWidget.generated.h"
 
 /**
@@ -18,5 +19,18 @@ private://function
 
 	UFUNCTION(BlueprintPure, Category = "Health", meta = (AllowPrivateAccess = "true"))
 	float GetHealthPrecent();
+
+	UFUNCTION(BlueprintCallable, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	bool GetCurrentWeaponUIData(FDataWeaponUI& UIData) const;
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
+	bool GetCurrentWeaponAmmoData(FAmmoWeapon& AmmoData) const;
+
+	UFUNCTION(BlueprintPure, Category = "Player", meta = (AllowPrivateAccess = "true"))
+	bool PlayerIsAlive() const;
+
+	UFUNCTION(BlueprintPure, Category = "Player", meta = (AllowPrivateAccess = "true"))
+	bool PlayerIsSpectator() const;
+
 	
 };

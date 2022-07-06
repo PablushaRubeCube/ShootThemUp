@@ -105,13 +105,16 @@ void ASTUBaseWeapon::MakeHit(const UWorld* World, FHitResult& HitResult,const FV
 
 void ASTUBaseWeapon::DecreaseBullet()
 {
+	if (CurrentAmmo.Bullet == 0)
+	{
+		UE_LOG(LogBaseWeapon, Warning, TEXT("Clips is empty"))
+	}
 	CurrentAmmo.Bullet--;
-	LogAmmoInfo();
 
 	if (ClipEmpty() && !AmmoEmpty())
 	{
 		StopFireWeapon();
-		OnReloadSignature.Broadcast();
+		OnReloadSignature.Broadcast(this);
 	}
 }
 
@@ -147,9 +150,43 @@ void ASTUBaseWeapon::LogAmmoInfo()
 	UE_LOG(LogBaseWeapon, Warning, TEXT("%s"), *Log);
 }
 
+bool ASTUBaseWeapon::IsAmmoFull()
+{
+	return CurrentAmmo.Bullet == DefaultAmmo.Bullet && CurrentAmmo.Clips == DefaultAmmo.Clips;
+}
+
 bool ASTUBaseWeapon::IsWeaponCanReload()
 {
 	return CurrentAmmo.Bullet < DefaultAmmo.Bullet && CurrentAmmo.Clips > 0;
+}
+
+bool ASTUBaseWeapon::TryToAddAmmo(int32 Clips)
+{
+	if (CurrentAmmo.bHasInfinityAmmo || IsAmmoFull() || Clips <= 0) return false;
+
+	if (AmmoEmpty())
+	{
+		CurrentAmmo.Clips = FMath::Clamp(Clips, 0, DefaultAmmo.Clips + 1);
+		OnReloadSignature.Broadcast(this);
+	}
+	else if (CurrentAmmo.Clips < DefaultAmmo.Clips)
+	{
+		const auto NextClipsAmount = CurrentAmmo.Clips + Clips;
+		if (DefaultAmmo.Clips - NextClipsAmount >= 0)
+		{
+			CurrentAmmo.Clips = NextClipsAmount;
+		}
+		else
+		{
+			CurrentAmmo.Clips = DefaultAmmo.Clips;
+			CurrentAmmo.Bullet = DefaultAmmo.Bullet;
+		}
+	}
+	else
+	{
+		CurrentAmmo.Bullet = DefaultAmmo.Bullet;
+	}
+	return true;
 }
 
 

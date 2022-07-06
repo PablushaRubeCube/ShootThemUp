@@ -21,21 +21,34 @@ struct FWeaponType
 
 
 //STUBaseWeapon
-DECLARE_MULTICAST_DELEGATE(FOnReloadSignature)
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnReloadSignature, ASTUBaseWeapon*)
 
 USTRUCT(BlueprintType)
 struct FAmmoWeapon
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (ClampMin = "1"));
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon", meta = (ClampMin = "1"));
 	int32 Bullet;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (EditCondition = "!bHasInfinityAmmo", ClampMin = "0"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon", meta = (EditCondition = "!bHasInfinityAmmo", ClampMin = "0"))
 	int32 Clips;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	bool bHasInfinityAmmo;
+};
+
+USTRUCT(BlueprintType)
+struct FDataWeaponUI
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Icon");
+	UTexture2D* MainIcon;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Icon");
+	UTexture2D* CroshairIcon;
+
 };
 
 //Health
