@@ -17,7 +17,7 @@ class SHOOTTHEMUP_API ASTUAmmoPickup : public ASTUBasePickup
 private://variables
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = "Weapon", meta = (AllowPrivateAccess = "true", ClampMin = "1.0"));
-	int32 ClipsValue;
+	int32 ClipsValue = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"));
 	TSubclassOf<class ASTUBaseWeapon> WeaponAmmo;

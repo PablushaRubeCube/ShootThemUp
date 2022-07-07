@@ -23,6 +23,9 @@ private://variables
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProjectileComponent", meta = (AllowPrivateAccess = "true"))
 	class UProjectileMovementComponent* ProjectileComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FX", meta = (AllowPrivateAccess = "true"))
+	class USTUWeaponFXComponent* FXComponent;
+
 	float LifeSpan;
 
 	//Prjetctile Direction

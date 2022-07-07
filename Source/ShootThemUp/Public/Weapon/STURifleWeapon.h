@@ -14,18 +14,25 @@ class SHOOTTHEMUP_API ASTURifleWeapon : public ASTUBaseWeapon
 {
 	GENERATED_BODY()
 
+public:
+
+	ASTURifleWeapon();
+
 private://varibales
 
 	FTimerHandle ShootTimer;
 
 	UPROPERTY(EditAnywhere, Category = "Weapon")
-	float FireRate = (0.1f);
+	float FireRate;
 
 	UPROPERTY(EditAnywhere, Category = "Weapon")
-	float BulletSpread = (1.5f);
+	float BulletSpread;
 
 	UPROPERTY(EditAnywhere, Category = "Weapon")
-	float DamageAmount = (10.f);
+	float DamageAmount;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FX", meta = (AllowPrivateAccess = "true"))
+	class USTUWeaponFXComponent* FXComponent;
 
 private://functions
 
@@ -33,6 +40,8 @@ private://functions
 
 protected://functions
 	virtual void MakeShot() override;
+
+	virtual void BeginPlay() override;
 
 public://functions
 	virtual	void StartFireWeapon() override;

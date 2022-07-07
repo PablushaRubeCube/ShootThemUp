@@ -5,6 +5,15 @@
 
 #include "DrawDebugHelpers.h"
 #include "Player/STUCharacter.h"
+#include "Weapon/Components/STUWeaponFXComponent.h"
+
+ASTURifleWeapon::ASTURifleWeapon():
+FireRate(0.1f),
+BulletSpread(1.5f),
+DamageAmount(10.f)
+{
+	FXComponent = CreateDefaultSubobject<USTUWeaponFXComponent>(TEXT("FXComponent"));
+}
 
 void ASTURifleWeapon::MakeDamage(const FHitResult& Result)
 {
@@ -49,8 +58,9 @@ void ASTURifleWeapon::MakeShot()
 		{
 			MakeDamage(HitResult);
 		}
-		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 3.f, 10, FColor::Red, false, 3.f, 0.f, 3.f);
-		DrawDebugLine(GetWorld(), GetMuzzleLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.f, 0, 3.f);
+		//DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 3.f, 10, FColor::Red, false, 3.f, 0.f, 3.f);
+		//DrawDebugLine(GetWorld(), GetMuzzleLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.f, 0, 3.f);
+		FXComponent->PlayImpactFX(HitResult);
 	}
 	else
 	{
@@ -58,6 +68,13 @@ void ASTURifleWeapon::MakeShot()
 	}
 	
 	DecreaseBullet();
+}
+
+void ASTURifleWeapon::BeginPlay()
+{
+	Super::BeginPlay();
+
+	check(FXComponent);
 }
 
 bool ASTURifleWeapon::GetTraceData(FVector& StartTrace, FVector& EndTrace) const

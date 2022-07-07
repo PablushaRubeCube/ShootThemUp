@@ -51,6 +51,8 @@ private://functions
 	//Set Health and call Broadcast
 	void SetHealth(float HealthValue);
 
+	bool IsHealthMax() const;
+
 protected://variables
 	
 	UPROPERTY(EditDefaultsOnly, meta=(ClampMin = "0"))
@@ -73,4 +75,6 @@ public://functions
 
 	//return percent of health in for widget
 	FORCEINLINE float GetHealthPercentage() const { return Health / MaxHealth; }
+
+	bool TryToAddHealth(float HealthValue);
 };

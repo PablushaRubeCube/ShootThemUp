@@ -99,7 +99,8 @@ void ASTUBaseWeapon::MakeHit(const UWorld* World, FHitResult& HitResult,const FV
 	if(!World) return;
 	FCollisionQueryParams CollisionParameters;
 	CollisionParameters.AddIgnoredActor(GetOwner());
-	
+	CollisionParameters.bReturnPhysicalMaterial = true;
+
 	GetWorld()->LineTraceSingleByChannel(HitResult,StartTrace,EndTrace,ECollisionChannel::ECC_Visibility,CollisionParameters);
 }
 

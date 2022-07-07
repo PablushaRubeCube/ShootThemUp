@@ -26,6 +26,8 @@ private://functions
 
 	void RespawnPickup();
 
+	float YawRotation;
+
 protected://variables
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,Category = "Mesh")
@@ -44,5 +46,7 @@ protected://functions
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void GenerateRotationYaw();
 
 };

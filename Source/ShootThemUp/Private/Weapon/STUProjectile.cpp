@@ -7,6 +7,7 @@
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/STUCharacter.h"
+#include "Weapon/Components/STUWeaponFXComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(STUProjectile, All, All)
 
@@ -24,10 +25,13 @@ bDoFullDamage(false)
 	CollisionSphere->SetSphereRadius(5.f);
 	CollisionSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	CollisionSphere->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+	CollisionSphere->bReturnMaterialOnMove = true;
 	SetRootComponent(CollisionSphere);
 
 	ProjectileComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComponent"));
 	ProjectileComponent->InitialSpeed = (2000.f);
+
+	FXComponent = CreateDefaultSubobject<USTUWeaponFXComponent>(TEXT("FXComponent"));
 
 }
 
@@ -42,6 +46,7 @@ void ASTUProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent,
 		GetWorld(), Damage, GetActorLocation(), Radius, UDamageType::StaticClass(),{GetOwner()}, this, GetPawnController(), bDoFullDamage);
 
 	DrawDebugSphere(GetWorld(), GetActorLocation(), Radius, 26.f, FColor::Red, false, 3.f, 0.f, 3.f);
+	FXComponent->PlayImpactFX(Hit);
 
 	Destroy();
 }
@@ -59,6 +64,7 @@ void ASTUProjectile::BeginPlay()
 
 	check(ProjectileComponent);
 	check(CollisionSphere);
+	check(FXComponent);
 
 	ProjectileComponent->Velocity = DirectionProjectile * ProjectileComponent->InitialSpeed;
 	CollisionSphere->IgnoreActorWhenMoving(GetOwner(), true);

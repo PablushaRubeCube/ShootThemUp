@@ -2,12 +2,17 @@
 
 
 #include "Pickups/STUHealthPickup.h"
+#include "Components/STUHealthComponent.h"
+#include "STUUtils.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LOGHeatlhPickup, All, All)
 
 bool ASTUHealthPickup::CanGivePickup(APawn* Pawn)
 {
-	UE_LOG(LOGHeatlhPickup, Warning, TEXT("CharTakeHealth"))
-	return true;
+	USTUHealthComponent* HealthComponent = STUUtils::GetSTUPlayerComponent<USTUHealthComponent>(Pawn);
+	
+	if (HealthComponent && HealthComponent->ISDead()) return false;
+
+	return HealthComponent && HealthComponent->TryToAddHealth(HealthAmount);
 
 }

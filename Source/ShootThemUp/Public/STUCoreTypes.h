@@ -56,3 +56,37 @@ struct FDataWeaponUI
 
 DECLARE_MULTICAST_DELEGATE(FOnDeathSignature);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnChangeHealthSignature, float);
+
+
+//FX
+USTRUCT(BlueprintType)
+struct FDecalData
+{
+
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Icon");
+	class UMaterialInstance* Material;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Icon");
+	FVector Size = FVector(10.f);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Icon");
+	float LifeTime = 5.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Icon");
+	float FadeOutTime = 0.7f;
+};
+
+USTRUCT(BlueprintType)
+struct FImpactData
+{
+
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Icon");
+	 FDecalData Decal;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Icon");
+	class UNiagaraSystem* NiagaraEffect;
+};

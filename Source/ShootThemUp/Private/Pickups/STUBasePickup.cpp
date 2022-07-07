@@ -45,6 +45,7 @@ void ASTUBasePickup::HidePickup()
 
 void ASTUBasePickup::RespawnPickup()
 {
+	GenerateRotationYaw();
 	if (SphereCollision)
 	{
 		SphereCollision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
@@ -58,7 +59,7 @@ void ASTUBasePickup::BeginPlay()
 	Super::BeginPlay();
 
 	check(SphereCollision);
-	
+	GenerateRotationYaw();
 }
 
 bool ASTUBasePickup::CanGivePickup(APawn* Pawn)
@@ -71,5 +72,12 @@ void ASTUBasePickup::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	AddActorLocalRotation(FRotator(0.f, YawRotation, 0.f));
+}
+
+void ASTUBasePickup::GenerateRotationYaw()
+{
+	const float Direction = FMath::RandBool() ? -1.f : 1.f;
+	YawRotation = FMath::RandRange(0.f, 10.f) * Direction;
 }
 

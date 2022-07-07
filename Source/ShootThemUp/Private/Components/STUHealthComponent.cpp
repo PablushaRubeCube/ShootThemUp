@@ -37,6 +37,14 @@ void USTUHealthComponent::BeginPlay()
 	
 }
 
+bool USTUHealthComponent::TryToAddHealth(float HealthValue)
+{
+	if (IsHealthMax() || ISDead()) return false;
+	
+	SetHealth(HealthValue+Health);
+	return true;
+}
+
 void USTUHealthComponent::OnTakeAnyDamageHandle(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
 	AController* InstigatedBy, AActor* DamageCauser)
 {
@@ -60,7 +68,7 @@ void USTUHealthComponent::HealUpdate()
 {
 	SetHealth(Health + HealModifier);
 
-	if (FMath::IsNearlyEqual(Health,MaxHealth) && GetWorld())
+	if (IsHealthMax() && GetWorld())
 	{
 		GetWorld()->GetTimerManager().ClearTimer(HealTimerHandle);
 	}
@@ -70,4 +78,9 @@ void USTUHealthComponent::SetHealth(float HealthValue)
 {
 	Health = FMath::Clamp(HealthValue, 0.f, MaxHealth);
 	OnChangeHealth.Broadcast(Health);
+}
+
+bool USTUHealthComponent::IsHealthMax() const
+{
+	return FMath::IsNearlyEqual(Health, MaxHealth);
 }

@@ -175,7 +175,7 @@ void USTUWeaponComponent::StopFire()
 
 void USTUWeaponComponent::NextWeapon()
 {
-	if (IsEquipInProgress()) return;
+	if (IsEquipInProgress() ||IsReloadInProgress()) return;
 	IndexWeapon = (IndexWeapon + 1) % Weapons.Num();
 	EquipWeapon(IndexWeapon);
 }
