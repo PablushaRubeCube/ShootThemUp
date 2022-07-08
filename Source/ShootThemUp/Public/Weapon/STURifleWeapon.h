@@ -34,14 +34,28 @@ private://varibales
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FX", meta = (AllowPrivateAccess = "true"))
 	class USTUWeaponFXComponent* FXComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FX", meta = (AllowPrivateAccess = "true"))
+	class UNiagaraComponent* RifleMuzzleFX;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "FX", meta = (AllowPrivateAccess = "true"))
+	UNiagaraSystem* TraceFx;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "FX", meta = (AllowPrivateAccess = "true"))
+	FString TraceEndName;
+
 private://functions
 
 	void MakeDamage(const FHitResult& Result);
+
+	void InitilizationFX();
+	void SetVisibilityFX(bool IsVisible);
 
 protected://functions
 	virtual void MakeShot() override;
 
 	virtual void BeginPlay() override;
+
+	void SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd);
 
 public://functions
 	virtual	void StartFireWeapon() override;

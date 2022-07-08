@@ -67,7 +67,7 @@ private://functions
 
 	void DeathChar();
 
-	void OnChangeHealth(float Health);
+	void OnChangeHealth(float Health, float DeltaHealth);
 
 	//call when we landed
 	UFUNCTION()

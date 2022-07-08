@@ -4,6 +4,8 @@
 #include "Components/STUHealthComponent.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
+#include "GameFramework/Pawn.h"
+#include "GameFramework/Controller.h"
 
 
 DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent,All,All)
@@ -53,6 +55,8 @@ void USTUHealthComponent::OnTakeAnyDamageHandle(AActor* DamagedActor, float Dama
 	SetHealth(Health - Damage);
 
 	GetWorld()->GetTimerManager().ClearTimer(HealTimerHandle);
+
+	PlayCameraShake();
 	
 	if(ISDead())
 	{
@@ -76,11 +80,28 @@ void USTUHealthComponent::HealUpdate()
 
 void USTUHealthComponent::SetHealth(float HealthValue)
 {
-	Health = FMath::Clamp(HealthValue, 0.f, MaxHealth);
-	OnChangeHealth.Broadcast(Health);
+	const auto NextHealth = FMath::Clamp(HealthValue, 0.f, MaxHealth);
+	const auto ChangeHealth = Health - NextHealth;
+	Health = NextHealth;
+	OnChangeHealth.Broadcast(Health, ChangeHealth);
 }
 
 bool USTUHealthComponent::IsHealthMax() const
 {
 	return FMath::IsNearlyEqual(Health, MaxHealth);
+}
+
+void USTUHealthComponent::PlayCameraShake() const
+{
+	if (!CameraShake) return;
+
+	if (ISDead()) return;
+
+	const auto Char = Cast<APawn>(GetOwner());
+	if (!Char) return;
+
+	const auto Controller = Cast<APlayerController>(Char->GetController());
+	if (!Controller || !Controller->PlayerCameraManager) return;
+
+	Controller->PlayerCameraManager->StartCameraShake(CameraShake);
 }

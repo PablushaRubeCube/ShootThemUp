@@ -44,6 +44,12 @@ protected://variables
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Icon")
 	FDataWeaponUI DataWeaponUI;
 
+	//Set Muzzle Flash
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Icon")
+	class UNiagaraSystem* MuzzleFX;
+
+
+
 protected://functions
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -62,6 +68,8 @@ protected://functions
 
 	bool IsAmmoFull();
 
+	//Spawn choose Muzzle
+	class UNiagaraComponent* SpawnMuzlleFX();
 
 public:	//functions
 	virtual	void StartFireWeapon();

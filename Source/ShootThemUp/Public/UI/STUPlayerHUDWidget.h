@@ -32,5 +32,13 @@ private://function
 	UFUNCTION(BlueprintPure, Category = "Player", meta = (AllowPrivateAccess = "true"))
 	bool PlayerIsSpectator() const;
 
-	
+	virtual bool Initialize() override;
+
+	void OnHealthChanged(float Health, float DeltaHealth);
+
+public:
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnTakeDamage();
+
 };

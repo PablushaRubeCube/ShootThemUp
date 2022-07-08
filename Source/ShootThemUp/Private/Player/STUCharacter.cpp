@@ -88,7 +88,7 @@ float ASTUCharacter::GetMovementDirection() const
 
 void ASTUCharacter::DeathChar()
 {
-	PlayAnimMontage(DeathMontage);
+	//PlayAnimMontage(DeathMontage);
 	
 	GetCharacterMovement()->DisableMovement();
 
@@ -99,9 +99,12 @@ void ASTUCharacter::DeathChar()
 	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
 	WeaponComponent->StopFire();
+
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	GetMesh()->SetSimulatePhysics(true);
 }
 
-void ASTUCharacter::OnChangeHealth(float Health)
+void ASTUCharacter::OnChangeHealth(float Health, float DeltaHealth)
 {
 	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }
@@ -128,8 +131,9 @@ void ASTUCharacter::BeginPlay()
 	check(HealthComponent);
 	check(HealthTextComponent);
 	check(GetCharacterMovement());
+	check(GetMesh());
 
-	OnChangeHealth(HealthComponent->GetHealth());
+	OnChangeHealth(HealthComponent->GetHealth(), 0.f);
 	HealthComponent->OnDeath.AddUObject(this,&ASTUCharacter::DeathChar);
 	HealthComponent->OnChangeHealth.AddUObject(this, &ASTUCharacter::OnChangeHealth);
 	LandedDelegate.AddDynamic(this, &ASTUAICharacter::OnGroudLanded);

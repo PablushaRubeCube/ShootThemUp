@@ -6,6 +6,8 @@
 #include "Player/STUCharacter.h"
 #include "Player/STUPlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon,All,All)
 
@@ -189,6 +191,18 @@ bool ASTUBaseWeapon::TryToAddAmmo(int32 Clips)
 	}
 	return true;
 }
+
+UNiagaraComponent* ASTUBaseWeapon::SpawnMuzlleFX()
+{
+	if (MuzzleFX)
+	{
+		return	UNiagaraFunctionLibrary::SpawnSystemAttached
+		(MuzzleFX, WeaponMeshComponent ,SocketName,FVector::ZeroVector,FRotator::ZeroRotator,EAttachLocation::SnapToTarget,true);
+	}
+	return nullptr;
+}
+
+
 
 
 void ASTUBaseWeapon::MakeShot()

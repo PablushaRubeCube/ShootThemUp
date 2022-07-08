@@ -55,7 +55,7 @@ struct FDataWeaponUI
 //STUHealthComponent
 
 DECLARE_MULTICAST_DELEGATE(FOnDeathSignature);
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnChangeHealthSignature, float);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnChangeHealthSignature, float, float);
 
 
 //FX

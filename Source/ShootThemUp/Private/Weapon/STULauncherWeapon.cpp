@@ -28,7 +28,7 @@ void ASTULauncherWeapon::MakeShot()
 	const auto EndPoit = HitResult.bBlockingHit ? HitResult.ImpactPoint : EndTrace;
 	const auto Direction = (EndPoit - GetMuzzleLocation()).GetSafeNormal();
 	
-	DrawDebugLine(GetWorld(), GetMuzzleLocation(), EndPoit, FColor::Red, false, 3.f, 0, 3.f);
+	//DrawDebugLine(GetWorld(), GetMuzzleLocation(), EndPoit, FColor::Red, false, 3.f, 0, 3.f);
 	
 	if (Projectile)
 	{
@@ -42,6 +42,7 @@ void ASTULauncherWeapon::MakeShot()
 		}
 	}
 	DecreaseBullet();
+	SpawnMuzlleFX();
 }
 
 

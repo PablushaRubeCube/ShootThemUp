@@ -13,10 +13,10 @@ DEFINE_LOG_CATEGORY_STATIC(LOGSTUWeaponComponent, All, All)
 
 // Sets default values for this component's properties
 USTUWeaponComponent::USTUWeaponComponent():
+CurrentWeapon(nullptr),
 SocketWeaponEquipName("WeaponEquipPoint"),
 SocketWeaponArmoryName("WeaponArmoryPoint"),
 IndexWeapon(0),
-CurrentWeapon(nullptr),
 bEquipInProgress(false),
 bReloadInProgress(false)
 {

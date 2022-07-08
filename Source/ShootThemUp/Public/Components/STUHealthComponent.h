@@ -40,6 +40,9 @@ private://varibales
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health", meta = (AllowPrivateAccess = "true", EditCondition = "bIsActivateAutoHeal"))
 	float HealModifier;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "FX", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf <UCameraShakeBase> CameraShake;
+
 private://functions
 
 	UFUNCTION()
@@ -52,6 +55,8 @@ private://functions
 	void SetHealth(float HealthValue);
 
 	bool IsHealthMax() const;
+
+	void PlayCameraShake() const;
 
 protected://variables
 	
