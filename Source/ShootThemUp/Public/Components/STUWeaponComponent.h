@@ -19,19 +19,11 @@ public://constructor
 
 private://variables
 
-	UPROPERTY()
-	class ASTUBaseWeapon* CurrentWeapon = nullptr;
-
-	UPROPERTY()
-	TArray<ASTUBaseWeapon*> Weapons;
-
 	UPROPERTY(EditAnywhere, Category= "Weapon", meta=(AllowPrivateAccess = "true"))
 	FName SocketWeaponEquipName;
 
 	UPROPERTY(EditAnywhere, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
 	FName SocketWeaponArmoryName;
-
-	int32 IndexWeapon;
 
 	//Equip animation montage
 	UPROPERTY(EditDefaultsOnly, Category = "Animations", meta = (AllowPrivateAccess = "true"))
@@ -45,20 +37,31 @@ private://variables
 	UPROPERTY(VisibleAnywhere, Category = "Animations", meta = (AllowPrivateAccess = "true"))
 	bool bReloadInProgress;
 
+	//Equip animation montage
+	UPROPERTY(VisibleAnywhere, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* CurrentReloadMontage;
+
+
+protected://variables
+
 	//Tarray struct weapons and reload montage
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
 	TArray<FWeaponType> WeaponType;
 
-	//Equip animation montage
-	UPROPERTY(VisibleAnywhere, Category = "Animations", meta = (AllowPrivateAccess = "true"))
-	UAnimMontage* CurrentReloadMontage;
+	UPROPERTY()
+	class ASTUBaseWeapon* CurrentWeapon = nullptr;
+
+	UPROPERTY()
+	TArray<ASTUBaseWeapon*> Weapons;
+
+	int32 IndexWeapon;
 
 private://functions
 	void SpawnWeapons();
 
 	void AttachWeaponToSocket(ASTUBaseWeapon* Weapon, USceneComponent* SceneComponent, const FName& SocketName);
 
-	void EquipWeapon(int32 Index);
+
 
 	//functions for call anim montage
 	void WeaponMontageAnimation(UAnimMontage* Montage);
@@ -77,17 +80,21 @@ private://functions
 	//call automaticly when we dont have bullets in clip
 	void ClipIsEmpty(ASTUBaseWeapon* AmmoEmptyWeapon);
 
-protected:
+protected:// functions
+
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason)override;
 
+	void EquipWeapon(int32 Index);
+
 public://functions
-	void StartFire();
+	virtual void StartFire();
+
 	void StopFire();
 		
-	void NextWeapon();
+	virtual void NextWeapon();
 
 	FORCEINLINE bool IsEquipInProgress() const { return bEquipInProgress; }
 

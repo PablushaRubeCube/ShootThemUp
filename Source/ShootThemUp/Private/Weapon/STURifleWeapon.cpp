@@ -9,6 +9,8 @@
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogRifleWeapon, All, All)
+
 ASTURifleWeapon::ASTURifleWeapon():
 FireRate(0.1f),
 BulletSpread(1.5f),
@@ -27,6 +29,7 @@ void ASTURifleWeapon::MakeDamage(const FHitResult& Result)
 
 void ASTURifleWeapon::StartFireWeapon()
 {
+	InitilizationFX();
 	GetWorldTimerManager().SetTimer(ShootTimer, this, &ASTURifleWeapon::MakeShot, FireRate, true);
 	MakeShot();
 }
@@ -65,8 +68,9 @@ void ASTURifleWeapon::MakeShot()
 		FXComponent->PlayImpactFX(HitResult);
 	}
 	DecreaseBullet();
-	InitilizationFX();
 	SpawnTraceFX(GetMuzzleLocation(), EndTrace);
+	//InitilizationFX();
+	//UE_LOG(LogRifleWeapon, Display, TEXT("MakeShot"));
 }
 
 void ASTURifleWeapon::BeginPlay()

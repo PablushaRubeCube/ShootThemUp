@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BehaviorTree/BehaviorTree.h"
 #include "Player/STUCharacter.h"
 #include "STUAICharacter.generated.h"
 
@@ -16,11 +15,11 @@ class SHOOTTHEMUP_API ASTUAICharacter : public ASTUCharacter
 	GENERATED_BODY()
 
 public:
-    ASTUAICharacter();
+    ASTUAICharacter(const FObjectInitializer& ObjInit);
 
 private://variables
 	UPROPERTY(EditDefaultsOnly, Category= "Behavior Tree", meta = (AllowPrivateAccess = "true"))
-	UBehaviorTree* BTAsset;
+	class UBehaviorTree* BTAsset;
 	
 public://functions
 	FORCEINLINE UBehaviorTree* GetBTAsset () const {return BTAsset;} 

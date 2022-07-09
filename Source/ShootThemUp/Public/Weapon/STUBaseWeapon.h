@@ -60,9 +60,6 @@ protected://functions
 	// call to relload weapon
 	bool ClipEmpty() const;
 
-	//return true if we dont have bullet
-	bool AmmoEmpty() const;
-
 	//temp log for ammo
 	void LogAmmoInfo();
 
@@ -75,6 +72,9 @@ public:	//functions
 	virtual	void StartFireWeapon();
 	virtual	void StopFireWeapon();
 	virtual void MakeShot();
+
+	//return true if we dont have bullet
+	bool AmmoEmpty() const;
 
 	APlayerController* GetPlayerController() const;
 	bool GetViewPort(FVector& ViewLocation, FRotator& ViewRotator) const;

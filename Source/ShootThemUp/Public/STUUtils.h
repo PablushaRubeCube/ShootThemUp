@@ -4,7 +4,7 @@ class STUUtils
 {
 public:
 	template<typename T>
-	 static T* GetSTUPlayerComponent(APawn* Char)
+	 static T* GetSTUPlayerComponent(AActor* Char)
 	{
 		{
 			if(!Char) return nullptr;

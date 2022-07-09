@@ -71,6 +71,8 @@ bool ASTUBaseWeapon::GetViewPort(FVector&ViewLocation, FRotator& ViewRotator) co
 	}
 	else
 	{
+		ViewLocation = GetMuzzleLocation();
+		ViewRotator = WeaponMeshComponent->GetSocketRotation(SocketName);
 		return true;
 	}
 

@@ -5,6 +5,8 @@
 
 #include "AIController.h"
 #include "Perception/AISense_Sight.h"
+#include "Components/STUHealthComponent.h"
+#include "STUUtils.h"
 
 AActor* USTUAIPerceptionComponent::GetClosestEnemy() const
 {
@@ -17,10 +19,13 @@ AActor* USTUAIPerceptionComponent::GetClosestEnemy() const
 	APawn* Char = Controller->GetPawn();
 	if(!Char) return nullptr;
 	
-	float MaxDistance = 1500.f;
+	float MaxDistance = MAX_FLT;
 	AActor* ClosestActor= nullptr;
 	for (const auto PerceivedActor : PerceivedActors)
 	{
+		const auto Component = STUUtils::GetSTUPlayerComponent<USTUHealthComponent>(PerceivedActor);
+		if (Component && Component->ISDead()) return nullptr;
+
 		const float CurrentDistance = (Char->GetActorLocation() - PerceivedActor->GetActorLocation()).Size();
 		if(CurrentDistance < MaxDistance)
 		{

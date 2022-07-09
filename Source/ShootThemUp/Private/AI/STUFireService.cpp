@@ -17,17 +17,19 @@ USTUFireService::USTUFireService()
 void USTUFireService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	const AAIController* Controller = OwnerComp.GetAIOwner();
-	if(!Controller) return;
-		
-	const auto Component = STUUtils::GetSTUPlayerComponent<USTUWeaponComponent>(Cast<ACharacter>(Controller->GetOwner()));
-
-	if(Component)
+	if (Controller)
 	{
-		const UBlackboardComponent* BlackBoard = OwnerComp.GetBlackboardComponent();
-		bool bHasAim = BlackBoard && BlackBoard->GetValueAsObject(EnemyKey.SelectedKeyName);
+	//	const auto Component = STUUtils::GetSTUPlayerComponent<USTUWeaponComponent>(Controller->GetOwner());
+	//	const auto Component = Controller->GetComponentByClass(USTUWeaponComponent::StaticClass());
+	//	USTUWeaponComponent* WeaponComponent = Cast<USTUWeaponComponent>(Component);
+		const auto WeaponComponent = STUUtils::GetSTUPlayerComponent<USTUWeaponComponent>(Controller->GetPawn());
+		if (WeaponComponent)
+		{
+			const UBlackboardComponent* BlackBoard = OwnerComp.GetBlackboardComponent();
+			bool bHasAim = BlackBoard && BlackBoard->GetValueAsObject(EnemyKey.SelectedKeyName);
 
-		bHasAim ? Component->StartFire() : Component->StopFire();
+			bHasAim ? WeaponComponent->StartFire() : WeaponComponent->StopFire();
+		}
 	}
-	
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 }

@@ -13,8 +13,8 @@ class SHOOTTHEMUP_API ASTUCharacter : public ACharacter
 
 public:
 	// Sets default values for this character's properties
-	ASTUCharacter();
-//	ASTUCharacter(const FObjectInitializer& ObjInit);
+	//ASTUCharacter();
+	ASTUCharacter(const FObjectInitializer& ObjInit);
 
 private://variables
 
@@ -23,15 +23,6 @@ private://variables
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Components", meta=(AllowPrivateAccess = "true"))
 	class UCameraComponent* CameraComponent;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Components", meta=(AllowPrivateAccess = "true"))
-	class USTUHealthComponent* HealthComponent;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Component", meta=(AllowPrivateAccess = "true"))
-	class USTUWeaponComponent* WeaponComponent;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Component", meta=(AllowPrivateAccess = "true"))
-	class UTextRenderComponent* HealthTextComponent;
 	
 	//UPROPERTY(BlueprintReadOnly, Category= "Movement", meta = (AllowPrivateAccess = "true"))
 	bool bIsRun;
@@ -72,6 +63,17 @@ private://functions
 	//call when we landed
 	UFUNCTION()
 	void OnGroudLanded(const FHitResult& Hit);
+
+protected://variables
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+		class USTUHealthComponent* HealthComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
+		class USTUWeaponComponent* WeaponComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
+		class UTextRenderComponent* HealthTextComponent;
 	
 protected:
 	// Called when the game starts or when spawned
