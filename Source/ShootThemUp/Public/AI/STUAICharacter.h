@@ -23,4 +23,6 @@ private://variables
 	
 public://functions
 	FORCEINLINE UBehaviorTree* GetBTAsset () const {return BTAsset;} 
+
+	virtual void DeathChar() override;
 };

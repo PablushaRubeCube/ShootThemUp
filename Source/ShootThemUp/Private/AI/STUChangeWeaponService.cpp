@@ -3,9 +3,11 @@
 
 #include "AI/STUChangeWeaponService.h"
 #include "Components/STUWeaponComponent.h"
+#include "AIController.h"
 #include "STUUtils.h"
 
-USTUChangeWeaponService::USTUChangeWeaponService()
+USTUChangeWeaponService::USTUChangeWeaponService():
+Chance(0.5f)
 {
 	NodeName = "ChangeWeapon";
 }
@@ -16,16 +18,17 @@ void USTUChangeWeaponService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 
 	float RandomFloat = FMath::FRand();
 
-	//Chance/
-
-	AController* Controller = Cast<AController>(OwnerComp.GetAIOwner());
-	if (!Controller) return;
-	APawn* Pawn = Controller->GetPawn();
-	if(!Pawn) return;
-
-	const auto Component = STUUtils::GetSTUPlayerComponent<USTUWeaponComponent>(Pawn);
-	if (Component)
+	if (RandomFloat <= Chance && Chance > 0)
 	{
-		Component->NextWeapon();
+		AAIController* Controller = OwnerComp.GetAIOwner();
+		if (!Controller) return;
+		const auto Pawn = Controller->GetPawn();
+		if (!Pawn) return;
+
+		const auto Component = STUUtils::GetSTUPlayerComponent<USTUWeaponComponent>(Pawn);
+		if (Component)
+		{
+			Component->NextWeapon();
+		}
 	}
 }

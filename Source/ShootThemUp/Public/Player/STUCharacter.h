@@ -56,8 +56,6 @@ private://functions
 	UFUNCTION(BlueprintPure, Category= "Movement",meta = (AllowPrivateAccess = "true"))
 	float GetMovementDirection() const;
 
-	void DeathChar();
-
 	void OnChangeHealth(float Health, float DeltaHealth);
 
 	//call when we landed
@@ -89,6 +87,8 @@ public:	// functions
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual void DeathChar();
 
 };
 

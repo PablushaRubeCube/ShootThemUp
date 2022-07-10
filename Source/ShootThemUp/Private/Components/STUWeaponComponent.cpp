@@ -13,12 +13,12 @@ DEFINE_LOG_CATEGORY_STATIC(LOGSTUWeaponComponent, All, All)
 
 // Sets default values for this component's properties
 USTUWeaponComponent::USTUWeaponComponent():
-CurrentWeapon(nullptr),
 SocketWeaponEquipName("WeaponEquipPoint"),
 SocketWeaponArmoryName("WeaponArmoryPoint"),
-IndexWeapon(0),
 bEquipInProgress(false),
-bReloadInProgress(false)
+bReloadInProgress(false),
+CurrentWeapon(nullptr),
+IndexWeapon(0)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
