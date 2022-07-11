@@ -90,3 +90,20 @@ struct FImpactData
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Icon");
 	class UNiagaraSystem* NiagaraEffect;
 };
+
+//GameMode
+USTRUCT(BlueprintType)
+struct FGameModeData
+{
+
+	GENERATED_BODY()
+
+		UPROPERTY(EditAnywhere, Category = "AI", meta = (ClampMin = "1"))
+		int32 PlayersNum = 2;
+
+	UPROPERTY(EditAnywhere, Category = "Rounds", meta = (ClampMin = "1"))
+		int32 Rounds = 3;
+
+	UPROPERTY(EditAnywhere, Category = "Rounds", meta = (ClampMin = "1"))
+		int32 TimerComeDown = 3;//in second
+};

@@ -63,8 +63,6 @@ protected://functions
 	//temp log for ammo
 	void LogAmmoInfo();
 
-	bool IsAmmoFull();
-
 	//Spawn choose Muzzle
 	class UNiagaraComponent* SpawnMuzlleFX();
 
@@ -97,5 +95,8 @@ public:	//functions
 	FORCEINLINE FAmmoWeapon GetDataWeaponAmmo() const { return CurrentAmmo; }
 
 	bool TryToAddAmmo(int32 Clips);
+
+	//Return true is ammo full
+	bool IsAmmoFull();
 
 };

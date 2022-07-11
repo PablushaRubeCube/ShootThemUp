@@ -11,6 +11,8 @@ FocusOnKeyName ("EnemyActor")
 {
 	STUPerceptionComponent = CreateDefaultSubobject<USTUAIPerceptionComponent>(TEXT("PerceptionComponent"));
 	SetPerceptionComponent(*STUPerceptionComponent);
+
+	bWantsPlayerState = true;
 }
 
 void ASTUAIController::OnPossess(APawn* InPawn)

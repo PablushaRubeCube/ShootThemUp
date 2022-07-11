@@ -57,6 +57,7 @@ protected://variables
 	int32 IndexWeapon;
 
 private://functions
+
 	void SpawnWeapons();
 
 	void AttachWeaponToSocket(ASTUBaseWeapon* Weapon, USceneComponent* SceneComponent, const FName& SocketName);
@@ -113,5 +114,8 @@ public://functions
 	bool GetCurrentDataAmmo(FAmmoWeapon& Data) const;
 
 	bool TryToAddAmmo(TSubclassOf<ASTUBaseWeapon> Weapon, int32 Clips);
+
+	bool NeedAmmo(TSubclassOf<ASTUBaseWeapon>Weapon);
+
 };
 

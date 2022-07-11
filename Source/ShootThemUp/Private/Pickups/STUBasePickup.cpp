@@ -38,8 +38,7 @@ void ASTUBasePickup::HidePickup()
 	{
 		SphereCollision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 		SphereCollision->SetVisibility(false, true);
-		FTimerHandle TimerHande;
-		GetWorldTimerManager().SetTimer(TimerHande, this, &ASTUBasePickup::RespawnPickup, TimerRespawnPickup);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASTUBasePickup::RespawnPickup, TimerRespawnPickup);
 	}
 }
 
@@ -79,5 +78,10 @@ void ASTUBasePickup::GenerateRotationYaw()
 {
 	const float Direction = FMath::RandBool() ? -1.f : 1.f;
 	YawRotation = FMath::RandRange(0.f, 10.f) * Direction;
+}
+
+bool ASTUBasePickup::IsCanPickup() const
+{
+	return !GetWorldTimerManager().IsTimerActive(TimerHandle);
 }
 
