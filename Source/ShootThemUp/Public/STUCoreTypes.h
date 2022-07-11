@@ -106,4 +106,10 @@ struct FGameModeData
 
 	UPROPERTY(EditAnywhere, Category = "Rounds", meta = (ClampMin = "1"))
 		int32 TimerComeDown = 3;//in second
+
+	UPROPERTY(EditAnywhere, Category = "Color")
+	FLinearColor DefaultColor = FLinearColor::Black;
+
+	UPROPERTY(EditAnywhere, Category = "Color")
+	TArray<FLinearColor> TeamsColor;
 };

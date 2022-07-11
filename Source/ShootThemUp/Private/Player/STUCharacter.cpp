@@ -47,6 +47,8 @@ Super(ObjInit.SetDefaultSubobjectClass<USTUCharacterMovementComponent>(ACharacte
 	LandedDamageVelocity = FVector2D(700.f, 1200.f);
 
 	LifeSpanOnDeath = 5.f;
+
+	ColorName = "Paint Color";
 }
 
 void ASTUCharacter::MoveForward(float Value)
@@ -102,6 +104,12 @@ void ASTUCharacter::DeathChar()
 
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	GetMesh()->SetSimulatePhysics(true);
+}
+
+void ASTUCharacter::SetPlayerColor(const FLinearColor& Color)
+{
+	const auto MaterialInst = GetMesh()->CreateAndSetMaterialInstanceDynamic(0);
+	if (MaterialInst) MaterialInst->SetVectorParameterValue(ColorName, Color);
 }
 
 void ASTUCharacter::OnChangeHealth(float Health, float DeltaHealth)

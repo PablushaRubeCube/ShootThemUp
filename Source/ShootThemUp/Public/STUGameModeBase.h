@@ -55,9 +55,16 @@ void StartRound();
 // time counter round
 void RoundTimeComeDown();
 
+//Reset Player after end round
 void ResetPlayer();
 
+//reset one player
 void ResetOnePlayer(AController* Controller);
 
+void CreateInfoTeam();
+
+FLinearColor DetermineColorByTeamID(const int32& ID);
+
+void SetPlayerColor(AController* Controller);
 	
 };

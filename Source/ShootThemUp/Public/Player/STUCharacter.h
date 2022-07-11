@@ -45,6 +45,9 @@ private://variables
 	UPROPERTY(EditAnywhere, Category = "Damage", meta = (AllowPrivateAccess = "true"))
 	FVector2D LandedDamageVelocity;
 
+	UPROPERTY(EditAnywhere, Category = "Color", meta = (AllowPrivateAccess = "true"))
+	FName ColorName;
+
 private://functions
 	
 	void MoveForward(float Value);
@@ -89,6 +92,8 @@ public:	// functions
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void DeathChar();
+
+	void SetPlayerColor(const FLinearColor& Color);
 
 };
 
