@@ -6,6 +6,7 @@
 #include "TimerManager.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/Controller.h"
+#include "STUGameModeBase.h"
 
 
 DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent,All,All)
@@ -60,6 +61,7 @@ void USTUHealthComponent::OnTakeAnyDamageHandle(AActor* DamagedActor, float Dama
 	
 	if(ISDead())
 	{
+		Killed(InstigatedBy);
 		OnDeath.Broadcast();
 	}
 	else if (bIsActivateAutoHeal)
@@ -104,4 +106,17 @@ void USTUHealthComponent::PlayCameraShake() const
 	if (!Controller || !Controller->PlayerCameraManager) return;
 
 	Controller->PlayerCameraManager->StartCameraShake(CameraShake);
+}
+
+void USTUHealthComponent::Killed(AController* Killer)
+{
+	if (!GetWorld())return;
+	ASTUGameModeBase* CurrentGameMode = Cast<ASTUGameModeBase>(GetWorld()->GetAuthGameMode());
+	const auto Char = Cast<APawn>(GetOwner());
+	if (CurrentGameMode && Char)
+	{
+		const auto CharController = Char->GetController();
+		if (!CharController) return;
+		CurrentGameMode->MakeKills(Killer, CharController);
+	}
 }

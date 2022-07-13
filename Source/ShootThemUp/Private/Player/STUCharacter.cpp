@@ -13,6 +13,8 @@
 #include "GameFramework/Controller.h"
 #include "Components/CapsuleComponent.h"
 
+#include "Player/STUPlayerState.h"
+
 
 DEFINE_LOG_CATEGORY_STATIC(LogCharacter,All,All)
 
@@ -23,6 +25,8 @@ Super(ObjInit.SetDefaultSubobjectClass<USTUCharacterMovementComponent>(ACharacte
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArmComponent->SetupAttachment(GetRootComponent());
@@ -154,7 +158,6 @@ void ASTUCharacter::BeginPlay()
 void ASTUCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 

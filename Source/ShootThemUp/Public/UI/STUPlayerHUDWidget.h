@@ -36,6 +36,18 @@ private://function
 
 	void OnHealthChanged(float Health, float DeltaHealth);
 
+	UFUNCTION(BlueprintPure, Category = "statistics", meta = (AllowPrivateAccess = "true"))
+	void GetTimeRound(int32& Minute, int32& Seconds);
+
+	UFUNCTION(BlueprintPure, Category = "statistics", meta = (AllowPrivateAccess = "true"))
+	void GetCurrentRound(int32& CurrentRound, int32& RoundsNum);
+
+	UFUNCTION(BlueprintPure, Category = "statistics", meta = (AllowPrivateAccess = "true"))
+	int32 GetKills();
+
+	UFUNCTION()
+	class ASTUGameModeBase* GetSTUGameMode();
+
 public:
 
 	UFUNCTION(BlueprintImplementableEvent)

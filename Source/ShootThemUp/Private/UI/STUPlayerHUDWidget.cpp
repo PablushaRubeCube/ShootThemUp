@@ -6,6 +6,11 @@
 #include "Components/STUWeaponComponent.h"
 #include "STUCoreTypes.h"
 #include "STUUtils.h"
+#include "STUGameModeBase.h"
+#include "STUCoreTypes.h"
+#include "Player/STUPlayerState.h"
+#include "Player/STUCharacter.h"
+
 
 float USTUPlayerHUDWidget::GetHealthPrecent()
 {	
@@ -59,6 +64,40 @@ void USTUPlayerHUDWidget::OnHealthChanged(float Health, float DeltaHealth)
 	{
 		OnTakeDamage();
 	}
+}
+
+void USTUPlayerHUDWidget::GetTimeRound(int32& Minute, int32& Seconds)
+{
+	if (!GetSTUGameMode())return;
+	 Minute = (GetSTUGameMode()->GetCurrentTime() / 60);
+	 Seconds = (GetSTUGameMode()->GetCurrentTime() % 60);
+}
+
+void USTUPlayerHUDWidget::GetCurrentRound(int32& CurrentRound, int32& RoundsNum)
+{
+	if (!GetSTUGameMode())return;
+	CurrentRound = (GetSTUGameMode()->GetCurrentRound());
+	RoundsNum = (GetSTUGameMode()->GetGameModeData().Rounds);
+}
+
+int32 USTUPlayerHUDWidget::GetKills()
+{
+	if (!GetOwningPlayer())return 0;
+	//const auto PlayerState = Cast<ASTUPlayerState> (GetOwningPlayer()->PlayerState);
+	const auto	PlayerState = GetOwningPlayer()->GetPlayerState<ASTUPlayerState>();
+	if (!PlayerState)return 0;
+	//UE_LOG(LogTemp, Display, TEXT("Kills:%s"), *PlayerState->GetName());
+
+	return	PlayerState->GetKillsNum();
+
+}
+
+ASTUGameModeBase* USTUPlayerHUDWidget::GetSTUGameMode()
+{
+	if (!GetWorld()) return nullptr;
+
+	const auto CurrentGameMode = Cast<ASTUGameModeBase>(GetWorld()->GetAuthGameMode());
+	return CurrentGameMode ? CurrentGameMode : nullptr;
 }
 
 

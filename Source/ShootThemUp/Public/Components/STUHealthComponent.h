@@ -58,6 +58,9 @@ private://functions
 
 	void PlayCameraShake() const;
 
+	//Call when we was kill
+	void Killed(AController* Killer);
+
 protected://variables
 	
 	UPROPERTY(EditDefaultsOnly, meta=(ClampMin = "0"))
@@ -82,4 +85,6 @@ public://functions
 	FORCEINLINE float GetHealthPercentage() const { return Health / MaxHealth; }
 
 	bool TryToAddHealth(float HealthValue);
+
+
 };

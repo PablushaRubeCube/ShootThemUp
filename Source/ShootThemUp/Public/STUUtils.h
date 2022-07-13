@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include"Player/STUPlayerState.h"
 
 class STUUtils
 {
@@ -14,7 +15,21 @@ public:
 			return Cast<T>(Component);
 		}
 	}
+
+
+	static bool AreEnemy(AController* CallController, AController* EnemyController)
+	{
+		if (!CallController || !EnemyController || CallController == EnemyController) return false;
+
+		const auto CallControllerPlayerState = Cast<ASTUPlayerState>(CallController->PlayerState);
+		const auto EnemyControllerPlayerState = Cast<ASTUPlayerState>(EnemyController->PlayerState);
+
+		return (CallControllerPlayerState && EnemyControllerPlayerState && CallControllerPlayerState->GetTeamID() != EnemyControllerPlayerState->GetTeamID());
+
+	}
 };
+
+
 
 
 

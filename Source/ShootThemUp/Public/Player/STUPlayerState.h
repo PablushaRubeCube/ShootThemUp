@@ -20,6 +20,9 @@ private://variables
 
 	FLinearColor TeamColor;
 
+	int32 KillsNum;
+	int32 DeathNum;
+
 public://functions/
 
 	FORCEINLINE int32 GetTeamID() const { return TeamID; }
@@ -27,5 +30,12 @@ public://functions/
 
 	FORCEINLINE FLinearColor GetTeamColor() const { return TeamColor; }
 	FORCEINLINE void SetTeamColor(const FLinearColor& Color) { TeamColor = Color; }
+
+	FORCEINLINE int32 GetKillsNum() const { return KillsNum; }
+	FORCEINLINE void AddKill() { ++KillsNum; }
+	FORCEINLINE int32 GetDeathNum() const { return DeathNum; }
+	FORCEINLINE void AddDeath() { ++DeathNum; }
+
+	void GetInfo();
 	
 };

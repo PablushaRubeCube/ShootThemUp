@@ -47,12 +47,14 @@ void ASTUBaseWeapon::StopFireWeapon()
 }
 
 
-APlayerController* ASTUBaseWeapon::GetPlayerController() const
+AController* ASTUBaseWeapon::GetPlayerController() const
 {
 	ASTUCharacter* Char = Cast<ASTUCharacter>(GetOwner());
+	return Char ? Char->GetController() : nullptr;
+	/*ASTUCharacter* Char = Cast<ASTUCharacter>(GetOwner());
 	if(!Char) return nullptr;
 	
-	return Char->GetController<APlayerController>();
+	return Char->GetController<APlayerController>();*/
 }
 
 
@@ -62,7 +64,7 @@ bool ASTUBaseWeapon::GetViewPort(FVector&ViewLocation, FRotator& ViewRotator) co
 	if(!Char) return false;
 	if (Char->IsPlayerControlled())
 	{
-		const APlayerController* Controller = GetPlayerController();
+		const AController* Controller = GetPlayerController();
 		if(!Controller) return false;
 		{
 			Controller->GetPlayerViewPoint(ViewLocation,ViewRotator);

@@ -75,6 +75,7 @@ void ASTUGameModeBase::RoundTimeComeDown()
 		else
 		{
 			UE_LOG(LogSTUGameMode, Warning, TEXT("GameOver"))
+				GetIfnoPlayersState();
 		}
 	}
 }
@@ -145,6 +146,41 @@ void ASTUGameModeBase::SetPlayerColor(AController* Controller)
 	if (!Char) return;
 
 	Char->SetPlayerColor(PlayerState->GetTeamColor());
+}
+
+void ASTUGameModeBase::MakeKills(AController* KillerController, AController* VictimController)
+{
+	if (!KillerController && !VictimController)return;
+
+	const auto KillerState = KillerController->GetPlayerState<ASTUPlayerState>();
+	const auto VictimState = VictimController->GetPlayerState<ASTUPlayerState>();
+
+	if (KillerState)
+	{
+		KillerState->AddKill();
+	}
+	if (VictimState)
+	{
+		VictimState->AddDeath();
+	}
+}
+
+void ASTUGameModeBase::GetIfnoPlayersState()
+{
+	if (!GetWorld()) return;
+
+	for (auto It = GetWorld()->GetControllerIterator(); It; ++It)
+	{
+		if (It)
+		{
+			const auto Controller = It->Get();
+			if (Controller)
+			{
+			const auto	playerState  = Controller->GetPlayerState<ASTUPlayerState>();
+			playerState->GetInfo();
+			}
+		}
+	}
 }
 
 

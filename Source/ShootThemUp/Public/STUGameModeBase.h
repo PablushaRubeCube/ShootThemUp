@@ -67,4 +67,16 @@ FLinearColor DetermineColorByTeamID(const int32& ID);
 
 void SetPlayerColor(AController* Controller);
 	
+void GetIfnoPlayersState();
+
+public://functios
+	//Call When we kill somebody
+	void MakeKills(AController* KillerController, AController* VictimController);
+
+	int32 GetCurrentTime() const { return CurrentTime; }
+
+	int32 GetCurrentRound() const { return CurrentRound; }
+
+	FGameModeData GetGameModeData() const { return GameModeData; }
+
 };

@@ -17,8 +17,6 @@ Super(ObjInit.SetDefaultSubobjectClass<USTUAIWeaponComponent>("WeaponComponent")
 	{
 		GetCharacterMovement()->bUseControllerDesiredRotation = true;
 	}
-	
-
 }
 
 void ASTUAICharacter::DeathChar()

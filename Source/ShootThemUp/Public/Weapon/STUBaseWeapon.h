@@ -74,7 +74,7 @@ public:	//functions
 	//return true if we dont have bullet
 	bool AmmoEmpty() const;
 
-	APlayerController* GetPlayerController() const;
+	AController* GetPlayerController() const;
 	bool GetViewPort(FVector& ViewLocation, FRotator& ViewRotator) const;
 	FVector GetMuzzleLocation() const;
 	virtual bool GetTraceData(FVector& StartTrace, FVector& EndTrace)  const;
