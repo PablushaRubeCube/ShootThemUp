@@ -14,4 +14,12 @@ class SHOOTTHEMUP_API ASTUPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
+public:
+	ASTUPlayerController();
+
+private://variables
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	class USTURespawnComponent* RespawnComponent;
+
 };

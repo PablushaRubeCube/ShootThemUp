@@ -18,18 +18,6 @@ public:
 
 private://variables
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Components", meta=(AllowPrivateAccess = "true"))
-	class USpringArmComponent* SpringArmComponent;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Components", meta=(AllowPrivateAccess = "true"))
-	class UCameraComponent* CameraComponent;
-	
-	//UPROPERTY(BlueprintReadOnly, Category= "Movement", meta = (AllowPrivateAccess = "true"))
-	bool bIsRun;
-
-	//UPROPERTY(BlueprintReadOnly, Category= "Movement", meta = (AllowPrivateAccess = "true"))
-	bool bIsMoveForward;
-
 	//Montage for death animation
 	UPROPERTY(EditAnywhere, Category= "Animation", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* DeathMontage;
@@ -49,12 +37,6 @@ private://variables
 	FName ColorName;
 
 private://functions
-	
-	void MoveForward(float Value);
-	void MoveRight(float Value);
-
-	void Run();
-	void StopRun();
 
 	UFUNCTION(BlueprintPure, Category= "Movement",meta = (AllowPrivateAccess = "true"))
 	float GetMovementDirection() const;
@@ -72,9 +54,6 @@ protected://variables
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 		class USTUWeaponComponent* WeaponComponent;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
-		class UTextRenderComponent* HealthTextComponent;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -83,13 +62,10 @@ protected:
 public:	// functions
 
 	UFUNCTION(BlueprintCallable, Category="Movement")
-	bool IsRunning() const;
+	virtual bool IsRunning() const;
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void DeathChar();
 

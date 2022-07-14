@@ -25,6 +25,9 @@ private://variables
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category= "AI", meta = (AllowPrivateAccess = "true"))
 	FName FocusOnKeyName;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	class USTURespawnComponent* RespawnComponent;
+
 private://functions
 	
 	virtual void OnPossess(APawn* InPawn) override;

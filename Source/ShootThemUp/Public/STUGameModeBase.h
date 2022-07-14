@@ -69,6 +69,11 @@ void SetPlayerColor(AController* Controller);
 	
 void GetIfnoPlayersState();
 
+//This function call when any character was killed 
+void CallRespawn(AController* Controller);
+
+void GameOver();
+
 public://functios
 	//Call When we kill somebody
 	void MakeKills(AController* KillerController, AController* VictimController);
@@ -78,5 +83,7 @@ public://functios
 	int32 GetCurrentRound() const { return CurrentRound; }
 
 	FGameModeData GetGameModeData() const { return GameModeData; }
+
+	void Respawn(AController* Controller);
 
 };

@@ -98,14 +98,17 @@ struct FGameModeData
 
 	GENERATED_BODY()
 
-		UPROPERTY(EditAnywhere, Category = "AI", meta = (ClampMin = "1"))
-		int32 PlayersNum = 2;
+	UPROPERTY(EditAnywhere, Category = "AI", meta = (ClampMin = "1"))
+	int32 PlayersNum = 2;
 
 	UPROPERTY(EditAnywhere, Category = "Rounds", meta = (ClampMin = "1"))
-		int32 Rounds = 3;
+	int32 Rounds = 3;
 
 	UPROPERTY(EditAnywhere, Category = "Rounds", meta = (ClampMin = "1"))
-		int32 TimerComeDown = 3;//in second
+	int32 TimerComeDown = 3;//in second
+
+	UPROPERTY(EditAnywhere, Category = "AI", meta = (ClampMin = "1"))
+	int32 RespawnTime = 3;//in second
 
 	UPROPERTY(EditAnywhere, Category = "Color")
 	FLinearColor DefaultColor = FLinearColor::Black;

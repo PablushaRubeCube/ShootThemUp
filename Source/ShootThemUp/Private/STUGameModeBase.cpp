@@ -8,9 +8,14 @@
 #include "UI/STUGameHud.h"
 #include "AIController.h"
 #include "Player/STUPlayerState.h"
+#include "STUUtils.h"
+#include "Components/STURespawnComponent.h"
+#include "EngineUtils.h"
 
 
 DEFINE_LOG_CATEGORY_STATIC(LogSTUGameMode, All, All)
+
+constexpr static int32 MinTimeRoundToRespawn = 10;
 
 ASTUGameModeBase::ASTUGameModeBase()
 {
@@ -74,8 +79,7 @@ void ASTUGameModeBase::RoundTimeComeDown()
 		}
 		else
 		{
-			UE_LOG(LogSTUGameMode, Warning, TEXT("GameOver"))
-				GetIfnoPlayersState();
+			GameOver();
 		}
 	}
 }
@@ -94,10 +98,10 @@ void ASTUGameModeBase::ResetOnePlayer(AController* Controller)
 {
 	if (Controller && Controller->GetPawn())
 	{
-		Controller->GetPawn()->Destroy();
+		Controller->GetPawn()->Reset();
+	}
 		RestartPlayer(Controller);
 		SetPlayerColor(Controller);
-	}
 }
 
 void ASTUGameModeBase::CreateInfoTeam()
@@ -163,6 +167,12 @@ void ASTUGameModeBase::MakeKills(AController* KillerController, AController* Vic
 	{
 		VictimState->AddDeath();
 	}
+	CallRespawn(VictimController);
+}
+
+void ASTUGameModeBase::Respawn(AController* Controller)
+{
+	ResetOnePlayer(Controller);
 }
 
 void ASTUGameModeBase::GetIfnoPlayersState()
@@ -181,6 +191,29 @@ void ASTUGameModeBase::GetIfnoPlayersState()
 			}
 		}
 	}
+}
+
+void ASTUGameModeBase::CallRespawn(AController* Controller)
+{
+	const bool RespawnAvaliable = CurrentTime > MinTimeRoundToRespawn + GameModeData.RespawnTime;
+	if (RespawnAvaliable)
+	{
+		if (!Controller) return;
+		const auto RespawnComponent = STUUtils::GetSTUPlayerComponent<USTURespawnComponent>(Controller);
+		if (!RespawnComponent) return;
+		RespawnComponent->StartTimerRespawn(GameModeData.RespawnTime);
+	}	
+}
+
+void ASTUGameModeBase::GameOver()
+{
+	for (auto pawn : TActorRange<APawn>(GetWorld()))
+	{
+		pawn->TurnOff();
+		pawn->DisableInput(nullptr);
+	}
+	UE_LOG(LogSTUGameMode, Warning, TEXT("GameOver"))
+	GetIfnoPlayersState();
 }
 
 

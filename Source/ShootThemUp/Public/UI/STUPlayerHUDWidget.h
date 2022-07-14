@@ -48,6 +48,8 @@ private://function
 	UFUNCTION()
 	class ASTUGameModeBase* GetSTUGameMode();
 
+	void OnNewPawn(APawn* Pawn);
+
 public:
 
 	UFUNCTION(BlueprintImplementableEvent)

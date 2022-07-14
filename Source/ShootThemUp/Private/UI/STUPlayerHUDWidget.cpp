@@ -50,10 +50,10 @@ bool USTUPlayerHUDWidget::PlayerIsSpectator() const
 
 bool USTUPlayerHUDWidget::Initialize()
 {
-	USTUHealthComponent* Component = STUUtils::GetSTUPlayerComponent<USTUHealthComponent>(GetOwningPlayerPawn());
-	if (Component)
+	if (GetOwningPlayer())
 	{
-		Component->OnChangeHealth.AddUObject(this, &USTUPlayerHUDWidget::OnHealthChanged);
+		GetOwningPlayer()->GetOnNewPawnNotifier().AddUObject(this, &USTUPlayerHUDWidget::OnNewPawn);
+		OnNewPawn(GetOwningPlayerPawn());
 	}
 	return Super::Initialize();
 }
@@ -98,6 +98,15 @@ ASTUGameModeBase* USTUPlayerHUDWidget::GetSTUGameMode()
 
 	const auto CurrentGameMode = Cast<ASTUGameModeBase>(GetWorld()->GetAuthGameMode());
 	return CurrentGameMode ? CurrentGameMode : nullptr;
+}
+
+void USTUPlayerHUDWidget::OnNewPawn(APawn* Pawn)
+{
+	USTUHealthComponent* Component = STUUtils::GetSTUPlayerComponent<USTUHealthComponent>(Pawn);
+	if (Component)
+	{
+		Component->OnChangeHealth.AddUObject(this, &USTUPlayerHUDWidget::OnHealthChanged);
+	}
 }
 
 
