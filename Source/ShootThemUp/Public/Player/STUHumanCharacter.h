@@ -26,6 +26,9 @@ private://variables
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* CameraComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	class USphereComponent* CameraSphere;
+
 	//UPROPERTY(BlueprintReadOnly, Category= "Movement", meta = (AllowPrivateAccess = "true"))
 	bool bIsRun;
 
@@ -40,9 +43,21 @@ private://functions
 	void Run();
 	void StopRun();
 
+	UFUNCTION()
+	void OnCameraSphereBeginOverlap
+	(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnCameraSphereEndOverlap
+	(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	void UpdateVisibleMeshAndComponents();
+
 protected://functnios
 
 	virtual void DeathChar() override;
+
+	virtual void BeginPlay() override;
 
 public://functnios
 

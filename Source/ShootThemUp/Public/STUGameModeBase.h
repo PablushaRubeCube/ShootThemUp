@@ -38,6 +38,10 @@ private://variables
 	int32 CurrentTime;
 	FTimerHandle TimerRoundTimeComeDown;
 
+	//Store Game State
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	EGameState GameModeState;
+
 private://functions
 
 // Call funtions when StartPlay
@@ -72,7 +76,21 @@ void GetIfnoPlayersState();
 //This function call when any character was killed 
 void CallRespawn(AController* Controller);
 
+//Call when round over
 void GameOver();
+
+//Call when we want change GameState
+void SetGameState(EGameState State);
+
+public://Variables
+
+//Delegate Variabales to SetGameState
+FOnGameStateChanged OnGameStateChanged;
+
+//Call override SetPause to change state
+virtual bool SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate = FCanUnpause()) override;
+
+virtual bool ClearPause() override;
 
 public://functios
 	//Call When we kill somebody

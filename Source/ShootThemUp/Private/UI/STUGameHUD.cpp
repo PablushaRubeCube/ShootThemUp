@@ -4,6 +4,10 @@
 #include "UI/STUGameHUD.h"
 #include "Engine/Canvas.h"
 #include "Blueprint/UserWidget.h"
+#include "STUGameModeBase.h"
+#include "STUCoreTypes.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogGameHUD, All, All)
 
 void ASTUGameHUD::DrawHUD()
 {
@@ -30,11 +34,44 @@ void ASTUGameHUD::BeginPlay()
 	Super::BeginPlay();
 
 	check(PlayerHudWidget);
+	check(PauseWidget);
 
-	auto Widget = CreateWidget<UUserWidget>(GetWorld(), PlayerHudWidget);
-	if (Widget)
+	if (GetWorld())
 	{
-		Widget->AddToViewport();
+		GameWidgets.Add(EGameState::EGS_InProgress, CreateWidget<UUserWidget>(GetWorld(), PlayerHudWidget));
+		GameWidgets.Add(EGameState::EGS_Paused, CreateWidget<UUserWidget>(GetWorld(), PauseWidget));
+
+		for (const auto Widget : GameWidgets)
+		{
+			const auto PairWidget = Widget.Value;
+			if (!PairWidget) continue;
+
+			PairWidget->AddToViewport();
+			PairWidget->SetVisibility(ESlateVisibility::Hidden);
+		}
+
+		ASTUGameModeBase* GameMode = Cast<ASTUGameModeBase>(GetWorld()->GetAuthGameMode());
+		if (GameMode)
+		{
+			GameMode->OnGameStateChanged.AddUObject(this, &ASTUGameHUD::GameStateChanged);
+		}
+	}
+}
+
+void ASTUGameHUD::GameStateChanged(EGameState State)
+{
+	if (CurrentWidget)
+	{
+		CurrentWidget->SetVisibility(ESlateVisibility::Hidden);
 	}
 
+	if (GameWidgets.Contains(State))
+	{
+		CurrentWidget = GameWidgets[State];
+	}
+	
+	if (CurrentWidget)
+	{
+		CurrentWidget->SetVisibility(ESlateVisibility::Visible);
+	}
 }

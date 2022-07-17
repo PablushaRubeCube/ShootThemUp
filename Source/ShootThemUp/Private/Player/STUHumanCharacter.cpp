@@ -5,6 +5,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "STUWeaponComponent.h"
+#include "Components/SphereComponent.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 ASTUHumanCharacter::ASTUHumanCharacter
@@ -22,6 +24,11 @@ ASTUHumanCharacter::ASTUHumanCharacter
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	CameraSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CameraSphera"));
+	CameraSphere->SetupAttachment(CameraComponent);
+	CameraSphere->SetSphereRadius(10.f);
+	CameraSphere->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 
 	bIsRun = (false);
 	bIsMoveForward = (false);
@@ -80,6 +87,34 @@ void ASTUHumanCharacter::StopRun()
 	bIsRun = false;
 }
 
+void ASTUHumanCharacter::OnCameraSphereBeginOverlap
+(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	UpdateVisibleMeshAndComponents();
+}
+
+void ASTUHumanCharacter::OnCameraSphereEndOverlap
+(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	UpdateVisibleMeshAndComponents();
+}
+
+void ASTUHumanCharacter::UpdateVisibleMeshAndComponents()
+{
+	const bool bIsCameraSphereOverlaped = CameraSphere->IsOverlappingComponent(GetCapsuleComponent());
+
+	GetMesh()->SetOwnerNoSee(bIsCameraSphereOverlaped);
+
+	TArray<USceneComponent*> ChildrenMesh;
+	GetMesh()->GetChildrenComponents(true, ChildrenMesh);
+
+	for (const auto MeshChild : ChildrenMesh)
+	{
+		const auto MeshChildGeometry = Cast<UPrimitiveComponent>(MeshChild);
+		if (MeshChildGeometry)MeshChildGeometry->SetOwnerNoSee(bIsCameraSphereOverlaped);
+	}
+}
+
 bool ASTUHumanCharacter::IsRunning() const
 {
 	return bIsRun && bIsMoveForward && !GetVelocity().IsZero();
@@ -89,4 +124,15 @@ void ASTUHumanCharacter::DeathChar()
 {
 	Super::DeathChar();
 	if (Controller) Controller->ChangeState(NAME_Spectating);
+}
+
+void ASTUHumanCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	check(CameraSphere);
+
+
+	CameraSphere->OnComponentBeginOverlap.AddDynamic(this, &ASTUHumanCharacter::OnCameraSphereBeginOverlap);
+	CameraSphere->OnComponentEndOverlap.AddDynamic(this, &ASTUHumanCharacter::OnCameraSphereEndOverlap);
 }

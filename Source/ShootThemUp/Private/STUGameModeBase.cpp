@@ -33,6 +33,7 @@ void ASTUGameModeBase::StartPlay()
 	CreateInfoTeam();
 	StartRound();
 	CurrentRound = 1;
+	SetGameState(EGameState::EGS_InProgress);
 }
 
 void ASTUGameModeBase::SpawnBots()
@@ -152,6 +153,29 @@ void ASTUGameModeBase::SetPlayerColor(AController* Controller)
 	Char->SetPlayerColor(PlayerState->GetTeamColor());
 }
 
+bool ASTUGameModeBase::SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate)
+{
+	const bool bCanPause = Super::SetPause(PC, CanUnpauseDelegate);
+
+	if (bCanPause)
+	{
+		SetGameState(EGameState::EGS_Paused);
+	}
+	return bCanPause;
+}
+
+bool ASTUGameModeBase::ClearPause()
+{
+	const bool bCanClearStatus = Super::ClearPause();
+
+	if (bCanClearStatus)
+	{
+		SetGameState(EGameState::EGS_InProgress);
+	}
+
+	return bCanClearStatus;
+}
+
 void ASTUGameModeBase::MakeKills(AController* KillerController, AController* VictimController)
 {
 	if (!KillerController && !VictimController)return;
@@ -214,6 +238,15 @@ void ASTUGameModeBase::GameOver()
 	}
 	UE_LOG(LogSTUGameMode, Warning, TEXT("GameOver"))
 	GetIfnoPlayersState();
+	SetGameState(EGameState::EGS_GameOver);
+}
+
+void ASTUGameModeBase::SetGameState(EGameState State)
+{
+	if (GameModeState == State)return;
+
+	GameModeState = State;
+	OnGameStateChanged.Broadcast(State);
 }
 
 

@@ -116,3 +116,16 @@ struct FGameModeData
 	UPROPERTY(EditAnywhere, Category = "Color")
 	TArray<FLinearColor> TeamsColor;
 };
+
+UENUM(BlueprintType)
+enum class EGameState : uint8
+{
+	EGS_WaintingToStart UMETA(DisplayName =  "Wainting To Start"),
+	EGS_InProgress UMETA(DisplayName = "In Progress"),
+	EGS_GameOver UMETA(DisplayName = "GameOver"),
+	EGS_Paused UMETA(DisplayName = "Paused"),
+
+	EGS_Max UMETA(DisplayName = "Default")
+};
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnGameStateChanged, EGameState);
