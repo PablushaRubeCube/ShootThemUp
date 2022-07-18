@@ -23,6 +23,9 @@ private://variables
 	UPROPERTY(EditDefaultsOnly, Category = "Player", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<class UUserWidget> PauseWidget;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Player", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class UUserWidget> GameOverWidget;
+
 	UPROPERTY()
 	TMap<EGameState, UUserWidget*> GameWidgets;
 

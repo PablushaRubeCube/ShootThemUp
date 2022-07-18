@@ -42,24 +42,15 @@ void ASTUPlayerController::BeginPlay()
 
 void ASTUPlayerController::GameStateChanged(EGameState State)
 {
-	switch (State)
+	if (State == EGameState::EGS_InProgress)
 	{
-	case EGameState::EGS_WaintingToStart:
-		break;
-	case EGameState::EGS_InProgress:
 		SetInputMode(FInputModeGameOnly());
 		bShowMouseCursor = (false);
-		break;
-	case EGameState::EGS_GameOver:
-		break;
-	case EGameState::EGS_Paused:
+	}
+	else
+	{
 		SetInputMode(FInputModeUIOnly());
 		bShowMouseCursor = (true);
-		break;
-	case EGameState::EGS_Max:
-		break;
-	default:
-		break;
 	}
 }
 

@@ -40,6 +40,8 @@ void ASTUGameHUD::BeginPlay()
 	{
 		GameWidgets.Add(EGameState::EGS_InProgress, CreateWidget<UUserWidget>(GetWorld(), PlayerHudWidget));
 		GameWidgets.Add(EGameState::EGS_Paused, CreateWidget<UUserWidget>(GetWorld(), PauseWidget));
+		GameWidgets.Add(EGameState::EGS_GameOver, CreateWidget<UUserWidget>(GetWorld(), GameOverWidget));
+		
 
 		for (const auto Widget : GameWidgets)
 		{
