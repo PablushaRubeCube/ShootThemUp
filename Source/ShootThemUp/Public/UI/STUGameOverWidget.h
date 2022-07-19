@@ -24,12 +24,18 @@ private://Variables
 	UPROPERTY(EditAnywhere, Category = "Stat", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf <UUserWidget> PlayerStatRow;
 
+	UPROPERTY(meta = (BindWidget))
+	class UButton* ResetLevelButton;
+
 private://functions
 
-	virtual bool Initialize() override;
+	virtual void NativeOnInitialized() override;
 
 	void GameStateChanged(EGameState State);
 
 	void UpdatePlayerStat();
+
+	UFUNCTION()
+	void ResetLevel();
 	
 };
