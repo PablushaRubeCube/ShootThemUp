@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "STUCoreTypes.h"
 #include "STUMenuUserWidget.generated.h"
 
 /**
@@ -24,9 +25,30 @@ private://variables
 
 	UPROPERTY( meta = (BindWidget))
 	class UButton* StarGameButton;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* QuitGameButton;
+
+	//Box for Array Level
+	UPROPERTY( meta = (BindWidget))
+	class UHorizontalBox* LevelBox;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Level", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> ToSpawnLevelWidget;
+
+	TArray<class USTULevelItemWidget*> LevelWidets;
 	
 private://functnios
 
 	UFUNCTION()
 	void StartGame();
+
+	UFUNCTION()
+	void QuitGame();
+
+	void InitialLevels();
+
+public:
+	UFUNCTION()
+	void Selectlevel(const FLevelData & Data);
 };

@@ -18,12 +18,16 @@ private://variables
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* PlayerName;
+
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* PlayerKills;
+
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* PlayerDeaths;
+
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* PlayerTeam;
+
 	UPROPERTY(meta = (BindWidget))
 	class UImage* PlayerStatIndicatorVisibility;
 	

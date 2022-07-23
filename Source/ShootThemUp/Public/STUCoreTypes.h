@@ -129,3 +129,23 @@ enum class EGameState : uint8
 };
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnGameStateChanged, EGameState);
+
+
+//STULevelItemWidget
+USTRUCT(BlueprintType)
+struct FLevelData
+{
+
+	GENERATED_BODY();
+
+	UPROPERTY(EditDefaultsOnly, Category = "LevelWidget")
+	FName DisplayName = NAME_None;
+
+	UPROPERTY(EditDefaultsOnly, Category = "LevelWidget")
+	FName LevelName = NAME_None;
+
+	UPROPERTY(EditDefaultsOnly, Category = "LevelWidget")
+	class UTexture2D* LevelPicture;
+};
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnLevelSelected,const FLevelData &)
