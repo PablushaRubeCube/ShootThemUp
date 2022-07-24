@@ -41,8 +41,6 @@ private://functions
 	UFUNCTION(BlueprintPure, Category= "Movement",meta = (AllowPrivateAccess = "true"))
 	float GetMovementDirection() const;
 
-	void OnChangeHealth(float Health, float DeltaHealth);
-
 	//call when we landed
 	UFUNCTION()
 	void OnGroudLanded(const FHitResult& Hit);
@@ -58,6 +56,8 @@ protected://variables
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	virtual void OnChangeHealth(float Health, float DeltaHealth);
 
 public:	// functions
 
