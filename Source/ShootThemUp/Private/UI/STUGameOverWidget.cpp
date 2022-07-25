@@ -54,6 +54,7 @@ void USTUGameOverWidget::UpdatePlayerStat()
         RowWidget->SetPlayerDeaths(FText::FromString(FString::FromInt(PlayerState->GetDeathNum())));
         RowWidget->SetTeam(FText::FromString(FString::FromInt(PlayerState->GetTeamID())));
         RowWidget->SetStatIndicatorVisibility(Controller->IsPlayerController());
+        RowWidget->SetTeamColor(PlayerState->GetTeamColor());
 
         PlayerStateBox->AddChild(RowWidget);
     }

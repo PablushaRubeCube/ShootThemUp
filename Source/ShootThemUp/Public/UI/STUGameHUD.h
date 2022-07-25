@@ -27,10 +27,10 @@ private://variables
 	TSubclassOf<class UUserWidget> GameOverWidget;
 
 	UPROPERTY()
-	TMap<EGameState, UUserWidget*> GameWidgets;
+	TMap<EGameState,class USTUBaseWidget*> GameWidgets;
 
 	UPROPERTY()
-	UUserWidget* CurrentWidget;
+	USTUBaseWidget* CurrentWidget;
 
 private://functions
 

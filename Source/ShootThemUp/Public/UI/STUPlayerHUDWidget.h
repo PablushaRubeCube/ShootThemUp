@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+#include "UI/STUBaseWidget.h"
 #include "STUCoreTypes.h"
 #include "STUPlayerHUDWidget.generated.h"
 
@@ -11,14 +11,33 @@
  * 
  */
 UCLASS()
-class SHOOTTHEMUP_API USTUPlayerHUDWidget : public UUserWidget
+class SHOOTTHEMUP_API USTUPlayerHUDWidget : public USTUBaseWidget
 {
 	GENERATED_BODY()
+
+private://variables
+
+	UPROPERTY(EditDefaultsOnly, Category = "Color", meta = (AllowPrivateAccess = "true"))
+	FLinearColor FullHealthBarColor = FLinearColor::White;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Color", meta = (AllowPrivateAccess = "true"))
+	FLinearColor VeryLowHealthBarColor = FLinearColor::Red;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Health", meta = (AllowPrivateAccess = "true"))
+	float ChangeColorThresholdHealhBar = 0.4f;
+
+	UPROPERTY(meta = (BindWidget))
+	class UProgressBar* HealthBar;
+
+	UPROPERTY(meta = (BindWidgetAnim), Transient)
+	UWidgetAnimation* BloodAnimation;
 
 private://function
 
 	UFUNCTION(BlueprintPure, Category = "Health", meta = (AllowPrivateAccess = "true"))
 	float GetHealthPrecent();
+
+	void UpdateColorHealthBarPlayer();
 
 	UFUNCTION(BlueprintCallable, Category = "UI", meta = (AllowPrivateAccess = "true"))
 	bool GetCurrentWeaponUIData(FDataWeaponUI& UIData) const;
@@ -45,10 +64,15 @@ private://function
 	UFUNCTION(BlueprintPure, Category = "statistics", meta = (AllowPrivateAccess = "true"))
 	int32 GetKills();
 
+	UFUNCTION(BlueprintPure, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	FString FormatBullets(int32 BulletsNum) const;
+
 	UFUNCTION()
 	class ASTUGameModeBase* GetSTUGameMode();
 
 	void OnNewPawn(APawn* Pawn);
+
+	void PlayBloodAnimation();
 
 public:
 

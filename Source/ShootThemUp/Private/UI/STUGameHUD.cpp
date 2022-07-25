@@ -3,7 +3,7 @@
 
 #include "UI/STUGameHUD.h"
 #include "Engine/Canvas.h"
-#include "Blueprint/UserWidget.h"
+#include "UI/STUBaseWidget.h"
 #include "STUGameModeBase.h"
 #include "STUCoreTypes.h"
 
@@ -38,9 +38,9 @@ void ASTUGameHUD::BeginPlay()
 
 	if (GetWorld())
 	{
-		GameWidgets.Add(EGameState::EGS_InProgress, CreateWidget<UUserWidget>(GetWorld(), PlayerHudWidget));
-		GameWidgets.Add(EGameState::EGS_Paused, CreateWidget<UUserWidget>(GetWorld(), PauseWidget));
-		GameWidgets.Add(EGameState::EGS_GameOver, CreateWidget<UUserWidget>(GetWorld(), GameOverWidget));
+		GameWidgets.Add(EGameState::EGS_InProgress, CreateWidget<USTUBaseWidget>(GetWorld(), PlayerHudWidget));
+		GameWidgets.Add(EGameState::EGS_Paused, CreateWidget<USTUBaseWidget>(GetWorld(), PauseWidget));
+		GameWidgets.Add(EGameState::EGS_GameOver, CreateWidget<USTUBaseWidget>(GetWorld(), GameOverWidget));
 		
 
 		for (const auto Widget : GameWidgets)
@@ -75,5 +75,6 @@ void ASTUGameHUD::GameStateChanged(EGameState State)
 	if (CurrentWidget)
 	{
 		CurrentWidget->SetVisibility(ESlateVisibility::Visible);
+		CurrentWidget->PlayShowAnimation();
 	}
 }

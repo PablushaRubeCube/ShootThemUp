@@ -28,11 +28,7 @@ void USTUMenuUserWidget::NativeOnInitialized()
 
 void USTUMenuUserWidget::StartGame()
 {
-	if (!GetWorld()) return;
-	const auto GameInstance = GetWorld()->GetGameInstance<USTUGameInstance>();
-	if (!GameInstance) return;
-
-	UGameplayStatics::OpenLevel(this, GameInstance->GetSelectedLevel().LevelName);
+	PlayAnimation(HideAnimation);
 }
 
 void USTUMenuUserWidget::QuitGame()
@@ -72,6 +68,17 @@ void USTUMenuUserWidget::InitialLevels()
 	}
 }
 
+void USTUMenuUserWidget::OnAnimationFinished_Implementation(const UWidgetAnimation* Animation)
+{
+	if (Animation != HideAnimation) return;
+	if (!GetWorld()) return;
+	const auto GameInstance = GetWorld()->GetGameInstance<USTUGameInstance>();
+	if (!GameInstance) return;
+
+	UGameplayStatics::OpenLevel(this, GameInstance->GetSelectedLevel().LevelName);
+}
+
+
 void USTUMenuUserWidget::Selectlevel(const FLevelData& Data)
 {
 	if (!GetWorld()) return;
@@ -86,6 +93,6 @@ void USTUMenuUserWidget::Selectlevel(const FLevelData& Data)
 
 		bool IsCurrentLevelName = WidgetInst->GetWidgetLevelData().LevelName == Data.LevelName;
 
-		WidgetInst->IsFrameVisible(IsCurrentLevelName);
+		WidgetInst->SetColorSelectedPicture(IsCurrentLevelName);
 	}
 }

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+#include "UI/STUBaseWidget.h"
 #include "STUCoreTypes.h"
 #include "STUMenuUserWidget.generated.h"
 
@@ -11,7 +11,7 @@
  * 
  */
 UCLASS()
-class SHOOTTHEMUP_API USTUMenuUserWidget : public UUserWidget
+class SHOOTTHEMUP_API USTUMenuUserWidget : public USTUBaseWidget
 {
 	GENERATED_BODY()
 
@@ -37,6 +37,9 @@ private://variables
 	TSubclassOf<UUserWidget> ToSpawnLevelWidget;
 
 	TArray<class USTULevelItemWidget*> LevelWidets;
+
+	UPROPERTY(meta = (BindWidgetAnim), Transient)
+	UWidgetAnimation* HideAnimation;
 	
 private://functnios
 
@@ -47,6 +50,9 @@ private://functnios
 	void QuitGame();
 
 	void InitialLevels();
+
+	void OnAnimationFinished_Implementation(const UWidgetAnimation* Animation);
+	
 
 public:
 	UFUNCTION()

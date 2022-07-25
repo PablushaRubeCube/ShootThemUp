@@ -36,6 +36,12 @@ private://functions
 	UFUNCTION()
 	void LevelSelected();
 
+	UFUNCTION()
+	void HoverLevel();
+
+	UFUNCTION()
+	void UnhoverLevel();
+
 protected:
 	
 	virtual void NativeOnInitialized() override;
@@ -46,7 +52,7 @@ FOnLevelSelected OnLevelSelected;
 
 public://functions
 
-	void IsFrameVisible(bool IsVisible);
+	void SetColorSelectedPicture(bool IsVisible);
 
 	void SetWidgetLevelData(const FLevelData& Data);
 	FORCEINLINE FLevelData GetWidgetLevelData() const { return LevelData; }

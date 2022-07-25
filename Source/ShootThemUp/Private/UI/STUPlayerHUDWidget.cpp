@@ -10,6 +10,7 @@
 #include "STUCoreTypes.h"
 #include "Player/STUPlayerState.h"
 #include "Player/STUCharacter.h"
+#include "Components/ProgressBar.h"
 
 
 float USTUPlayerHUDWidget::GetHealthPrecent()
@@ -18,6 +19,15 @@ float USTUPlayerHUDWidget::GetHealthPrecent()
 	if (!Component) return  0.0f;
 	
 	return Component->GetHealthPercentage();	
+}
+
+void USTUPlayerHUDWidget::UpdateColorHealthBarPlayer()
+{
+	if (HealthBar)
+	{
+		HealthBar->SetFillColorAndOpacity
+		(GetHealthPrecent() > ChangeColorThresholdHealhBar ? FullHealthBarColor : VeryLowHealthBarColor);
+	}
 }
 
 bool USTUPlayerHUDWidget::GetCurrentWeaponUIData(FDataWeaponUI& UIData) const
@@ -63,7 +73,9 @@ void USTUPlayerHUDWidget::OnHealthChanged(float Health, float DeltaHealth)
 	if (DeltaHealth > 0)
 	{
 		OnTakeDamage();
+		PlayBloodAnimation();
 	}
+	UpdateColorHealthBarPlayer();
 }
 
 void USTUPlayerHUDWidget::GetTimeRound(int32& Minute, int32& Seconds)
@@ -92,6 +104,22 @@ int32 USTUPlayerHUDWidget::GetKills()
 
 }
 
+FString USTUPlayerHUDWidget::FormatBullets(int32 BulletsNum) const
+{
+	const int32 MaxLen = 2;
+	const TCHAR PrefixSymbol = '0';
+
+	FString BulletStr = FString::FromInt(BulletsNum);
+	const int32 SymbolsNumToAdd = MaxLen - BulletStr.Len();
+
+	if (SymbolsNumToAdd > 0)
+	{
+		BulletStr = FString::ChrN(SymbolsNumToAdd, PrefixSymbol).Append(BulletStr);
+	}
+
+	return BulletStr;
+}
+
 ASTUGameModeBase* USTUPlayerHUDWidget::GetSTUGameMode()
 {
 	if (!GetWorld()) return nullptr;
@@ -106,6 +134,15 @@ void USTUPlayerHUDWidget::OnNewPawn(APawn* Pawn)
 	if (Component)
 	{
 		Component->OnChangeHealth.AddUObject(this, &USTUPlayerHUDWidget::OnHealthChanged);
+	}
+	UpdateColorHealthBarPlayer();
+}
+
+void USTUPlayerHUDWidget::PlayBloodAnimation()
+{
+	if (!IsAnimationPlaying(BloodAnimation))
+	{
+		PlayAnimation(BloodAnimation);
 	}
 }
 

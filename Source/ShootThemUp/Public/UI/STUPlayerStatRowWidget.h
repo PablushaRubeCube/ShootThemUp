@@ -30,6 +30,9 @@ private://variables
 
 	UPROPERTY(meta = (BindWidget))
 	class UImage* PlayerStatIndicatorVisibility;
+
+	UPROPERTY(meta = (BindWidget))
+	UImage* TeamColor;
 	
 public://functions
 
@@ -38,4 +41,5 @@ public://functions
 	void SetPlayerDeaths(const FText& Death);
 	void SetTeam(const FText& Team);
 	void SetStatIndicatorVisibility(bool IsVisible);
+	void SetTeamColor(const FLinearColor& color);
 };
