@@ -8,6 +8,9 @@
 #include "Weapon/Components/STUWeaponFXComponent.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Components/AudioComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogRifleWeapon, All, All)
 
@@ -37,7 +40,7 @@ void ASTURifleWeapon::StartFireWeapon()
 void ASTURifleWeapon::StopFireWeapon()
 {
 	GetWorldTimerManager().ClearTimer(ShootTimer);
-	SetVisibilityFX(false);
+	ToggleFX(false);
 }
 
 void ASTURifleWeapon::MakeShot()
@@ -86,17 +89,24 @@ void ASTURifleWeapon::InitilizationFX()
 	{
 		RifleMuzzleFX = SpawnMuzlleFX();
 	}
-	SetVisibilityFX(true);
+	if (!SpawnedShootSound)
+	{
+		SpawnedShootSound = UGameplayStatics::SpawnSoundAttached(ShootSound,WeaponMeshComponent, MuzzleSocketName);
+	}
+	ToggleFX(true);
 }
 
-void ASTURifleWeapon::SetVisibilityFX(bool IsVisible)
+void ASTURifleWeapon::ToggleFX(bool bTurnOn)
 {
 	if (RifleMuzzleFX)
 	{
-		RifleMuzzleFX->SetPaused(!IsVisible);
-		RifleMuzzleFX->SetVisibility(IsVisible, false);
+		RifleMuzzleFX->SetPaused(!bTurnOn);
+		RifleMuzzleFX->SetVisibility(bTurnOn, false);
 	}
-	
+	if (SpawnedShootSound)
+	{
+		bTurnOn ? SpawnedShootSound->Play() : SpawnedShootSound->Stop();
+	}
 }
 
 bool ASTURifleWeapon::GetTraceData(FVector& StartTrace, FVector& EndTrace) const

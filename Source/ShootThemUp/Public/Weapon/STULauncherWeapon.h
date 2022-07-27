@@ -20,6 +20,9 @@ private://Variables
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"));
 	TSubclassOf<class ASTUProjectile> Projectile;
 
+	UPROPERTY(EditAnywhere, Category = "Sound", meta = (AllowPrivateAccess = "true"));
+	class USoundCue* AmmoEmptySound;
+
 protected://functions
 
 	virtual void MakeShot() override;

@@ -4,12 +4,16 @@
 #include "Weapon/STULauncherWeapon.h"
 #include "Weapon/STUProjectile.h"
 #include "DrawDebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 
 void ASTULauncherWeapon::MakeShot()
 {
-	if (!GetWorld() || AmmoEmpty())
+	if (!GetWorld()) return;
+	if( AmmoEmpty())
 	{
+		UGameplayStatics::PlaySound2D(GetWorld(), AmmoEmptySound);
 		StopFireWeapon();
 		return;
 	}
@@ -43,6 +47,7 @@ void ASTULauncherWeapon::MakeShot()
 	}
 	DecreaseBullet();
 	SpawnMuzlleFX();
+	UGameplayStatics::PlaySound2D(GetWorld(), ShootSound);
 }
 
 

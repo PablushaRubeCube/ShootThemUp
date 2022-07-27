@@ -34,7 +34,7 @@ protected://variables
 	float MaxShotDistance;
 
 	UPROPERTY(EditAnywhere, Category = "Weapon")
-	FName SocketName = "MuzzleFlashSocket";
+	FName MuzzleSocketName = "MuzzleFlashSocket";
 
 	//skeletal mesh our weapon
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
@@ -48,7 +48,8 @@ protected://variables
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Icon")
 	class UNiagaraSystem* MuzzleFX;
 
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sound")
+	class USoundCue* ShootSound;
 
 protected://functions
 	// Called when the game starts or when spawned

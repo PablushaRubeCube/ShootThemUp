@@ -43,12 +43,15 @@ private://varibales
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "FX", meta = (AllowPrivateAccess = "true"))
 	FString TraceEndName;
 
+	UPROPERTY()
+	class UAudioComponent* SpawnedShootSound;
+
 private://functions
 
 	void MakeDamage(const FHitResult& Result);
 
 	void InitilizationFX();
-	void SetVisibilityFX(bool IsVisible);
+	void ToggleFX(bool bTurnOn);
 
 protected://functions
 	virtual void MakeShot() override;

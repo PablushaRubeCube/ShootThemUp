@@ -29,7 +29,7 @@ private://variables
 	FName MainMenuName = NAME_None;
 
 public://functions
-	FORCEINLINE TArray<FLevelData> GetLevels() const { return Levels; }
+	FORCEINLINE const TArray<FLevelData>& GetLevels() const { return Levels; }
 
 	FORCEINLINE FLevelData GetSelectedLevel() const { return SelectedLevel; }
 	FORCEINLINE void SetSelectedLevel(const FLevelData& Data) { SelectedLevel = Data; }

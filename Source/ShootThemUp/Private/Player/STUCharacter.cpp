@@ -11,6 +11,8 @@
 #include "GameFramework/Controller.h"
 #include "Components/CapsuleComponent.h"
 #include "Player/STUPlayerState.h"
+#include "Sound/SoundCue.h"
+#include "Kismet/GameplayStatics.h"
 
 
 DEFINE_LOG_CATEGORY_STATIC(LogCharacter,All,All)
@@ -63,6 +65,8 @@ void ASTUCharacter::DeathChar()
 
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	GetMesh()->SetSimulatePhysics(true);
+
+	UGameplayStatics::PlaySoundAtLocation(this, PlayerDeathSound, GetActorLocation());
 }
 
 void ASTUCharacter::SetPlayerColor(const FLinearColor& Color)

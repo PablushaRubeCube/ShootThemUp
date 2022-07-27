@@ -19,6 +19,9 @@ protected://variables
 	UPROPERTY(meta = (BindWidgetAnim), Transient)
 	UWidgetAnimation* ShowAnimation;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	class USoundCue* OpenSound;
+
 public://functinos
 
 	void PlayShowAnimation();

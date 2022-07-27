@@ -74,7 +74,7 @@ bool ASTUBaseWeapon::GetViewPort(FVector&ViewLocation, FRotator& ViewRotator) co
 	else
 	{
 		ViewLocation = GetMuzzleLocation();
-		ViewRotator = WeaponMeshComponent->GetSocketRotation(SocketName);
+		ViewRotator = WeaponMeshComponent->GetSocketRotation(MuzzleSocketName);
 		return true;
 	}
 
@@ -83,7 +83,7 @@ bool ASTUBaseWeapon::GetViewPort(FVector&ViewLocation, FRotator& ViewRotator) co
 
 FVector ASTUBaseWeapon::GetMuzzleLocation() const
 {
-	return WeaponMeshComponent->GetSocketLocation(SocketName);
+	return WeaponMeshComponent->GetSocketLocation(MuzzleSocketName);
 }
 
 
@@ -201,7 +201,7 @@ UNiagaraComponent* ASTUBaseWeapon::SpawnMuzlleFX()
 	if (MuzzleFX)
 	{
 		return	UNiagaraFunctionLibrary::SpawnSystemAttached
-		(MuzzleFX, WeaponMeshComponent ,SocketName,FVector::ZeroVector,FRotator::ZeroRotator,EAttachLocation::SnapToTarget,true);
+		(MuzzleFX, WeaponMeshComponent , MuzzleSocketName,FVector::ZeroVector,FRotator::ZeroRotator,EAttachLocation::SnapToTarget,true);
 	}
 	return nullptr;
 }

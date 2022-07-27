@@ -36,6 +36,9 @@ private://variables
 	UPROPERTY(EditAnywhere, Category = "Color", meta = (AllowPrivateAccess = "true"))
 	FName ColorName;
 
+	UPROPERTY(EditAnywhere, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	class USoundCue* PlayerDeathSound;
+
 private://functions
 
 	UFUNCTION(BlueprintPure, Category= "Movement",meta = (AllowPrivateAccess = "true"))

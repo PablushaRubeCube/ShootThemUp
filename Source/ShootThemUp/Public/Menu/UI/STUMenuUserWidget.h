@@ -40,6 +40,9 @@ private://variables
 
 	UPROPERTY(meta = (BindWidgetAnim), Transient)
 	UWidgetAnimation* HideAnimation;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	class USoundCue* StartGameSound;
 	
 private://functnios
 
