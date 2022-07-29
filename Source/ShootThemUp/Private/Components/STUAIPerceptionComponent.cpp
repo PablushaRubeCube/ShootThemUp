@@ -5,6 +5,7 @@
 
 #include "AIController.h"
 #include "Perception/AISense_Sight.h"
+#include "Perception/AISense_Damage.h"
 #include "Components/STUHealthComponent.h"
 #include "STUUtils.h"
 
@@ -12,8 +13,12 @@ AActor* USTUAIPerceptionComponent::GetClosestEnemy() const
 {
 	TArray<AActor*> PerceivedActors;
 	GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(),PerceivedActors);
-	if(PerceivedActors.Num() == 0 )return nullptr;
-	
+	if (PerceivedActors.Num() == 0)
+	{
+		GetCurrentlyPerceivedActors(UAISense_Damage::StaticClass(), PerceivedActors);
+		if(PerceivedActors.Num() == 0) return nullptr;
+
+	}
 	AAIController* Controller = Cast<AAIController>(GetOwner());
 	if(!Controller) return nullptr;
 	APawn* Char = Controller->GetPawn();

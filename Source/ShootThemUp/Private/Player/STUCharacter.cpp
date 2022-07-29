@@ -75,6 +75,20 @@ void ASTUCharacter::SetPlayerColor(const FLinearColor& Color)
 	if (MaterialInst) MaterialInst->SetVectorParameterValue(ColorName, Color);
 }
 
+void ASTUCharacter::TurnOff()
+{
+	WeaponComponent->StopFire();
+	WeaponComponent->Zoom(false);
+	Super::TurnOff();
+}
+
+void ASTUCharacter::Reset()
+{
+	WeaponComponent->StopFire();
+	WeaponComponent->Zoom(false);
+	Super::Reset();
+}
+
 void ASTUCharacter::OnChangeHealth(float Health, float DeltaHealth)
 {
 }

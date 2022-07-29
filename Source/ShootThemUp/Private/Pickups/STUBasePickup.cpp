@@ -3,6 +3,8 @@
 
 #include "Pickups/STUBasePickup.h"
 #include "Components/SphereComponent.h"
+#include "Sound/SoundCue.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LOGBasePickup, All, All)
 
@@ -28,17 +30,21 @@ void ASTUBasePickup::NotifyActorBeginOverlap(AActor* OtherActor)
 	const auto Pawn = Cast<APawn>(OtherActor);
 	if (CanGivePickup(Pawn))
 	{
-		HidePickup();
+		PickupWasTaken();
 	}
 }
 
-void ASTUBasePickup::HidePickup()
+void ASTUBasePickup::PickupWasTaken()
 {
 	if (SphereCollision)
 	{
 		SphereCollision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 		SphereCollision->SetVisibility(false, true);
 		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASTUBasePickup::RespawnPickup, TimerRespawnPickup);
+	}
+	if (PickupSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, PickupSound, GetActorLocation());
 	}
 }
 

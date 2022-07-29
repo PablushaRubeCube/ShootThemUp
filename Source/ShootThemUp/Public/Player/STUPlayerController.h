@@ -34,4 +34,6 @@ private:// functions
 
 	void GameStateChanged(EGameState State);
 
+	void MuteGame();
+
 };

@@ -82,6 +82,8 @@ void GameOver();
 //Call when we want change GameState
 void SetGameState(EGameState State);
 
+void StopAllFire();
+
 public://Variables
 
 //Delegate Variabales to SetGameState

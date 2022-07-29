@@ -10,7 +10,9 @@
 #include "Player/STUPlayerState.h"
 #include "STUUtils.h"
 #include "Components/STURespawnComponent.h"
+#include "Components/STUWeaponComponent.h"
 #include "EngineUtils.h"
+
 
 
 DEFINE_LOG_CATEGORY_STATIC(LogSTUGameMode, All, All)
@@ -239,6 +241,8 @@ void ASTUGameModeBase::GameOver()
 	UE_LOG(LogSTUGameMode, Warning, TEXT("GameOver"))
 	GetIfnoPlayersState();
 	SetGameState(EGameState::EGS_GameOver);
+
+
 }
 
 void ASTUGameModeBase::SetGameState(EGameState State)
@@ -247,6 +251,18 @@ void ASTUGameModeBase::SetGameState(EGameState State)
 
 	GameModeState = State;
 	OnGameStateChanged.Broadcast(State);
+}
+
+void ASTUGameModeBase::StopAllFire()
+{
+	for (auto Pawn : TActorRange<APawn>(GetWorld()))
+	{
+		USTUWeaponComponent* Component = STUUtils::GetSTUPlayerComponent<USTUWeaponComponent>(Pawn);
+		if (!Component) continue;
+
+		Component->StopFire();
+		Component->Zoom(false);
+	}
 }
 
 

@@ -18,7 +18,8 @@ ASTURifleWeapon::ASTURifleWeapon():
 FireRate(0.1f),
 BulletSpread(1.5f),
 DamageAmount(10.f),
-TraceEndName("TraceEnd")
+TraceEndName("TraceEnd"),
+ZoomFOV(50.f)
 {
 	FXComponent = CreateDefaultSubobject<USTUWeaponFXComponent>(TEXT("FXComponent"));
 }
@@ -27,7 +28,10 @@ void ASTURifleWeapon::MakeDamage(const FHitResult& Result)
 {
 	const auto HitActor = Result.GetActor();
 	if (!HitActor) return;
-	HitActor->TakeDamage(DamageAmount, FDamageEvent{}, GetPlayerController(), this);
+
+	FPointDamageEvent PointDamageEvent;
+	PointDamageEvent.HitInfo = Result;
+	HitActor->TakeDamage(DamageAmount, PointDamageEvent, GetSTUController(), this);
 }
 
 void ASTURifleWeapon::StartFireWeapon()
@@ -81,6 +85,7 @@ void ASTURifleWeapon::BeginPlay()
 	Super::BeginPlay();
 
 	check(FXComponent);
+
 }
 
 void ASTURifleWeapon::InitilizationFX()
@@ -107,6 +112,18 @@ void ASTURifleWeapon::ToggleFX(bool bTurnOn)
 	{
 		bTurnOn ? SpawnedShootSound->Play() : SpawnedShootSound->Stop();
 	}
+}
+
+void ASTURifleWeapon::Zoom(const bool bIsZoom)
+{
+	const auto Controller = Cast<APlayerController>(GetSTUController());
+	if (!Controller || !Controller->PlayerCameraManager) return;
+
+	if (!DefaultFOV.IsSet())
+	{
+		DefaultFOV = Controller->PlayerCameraManager->GetFOVAngle();
+	}
+	Controller->PlayerCameraManager->SetFOV(bIsZoom ? ZoomFOV : DefaultFOV.GetValue());
 }
 
 bool ASTURifleWeapon::GetTraceData(FVector& StartTrace, FVector& EndTrace) const

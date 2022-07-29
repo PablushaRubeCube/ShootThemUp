@@ -75,7 +75,7 @@ public:	//functions
 	//return true if we dont have bullet
 	bool AmmoEmpty() const;
 
-	AController* GetPlayerController() const;
+	AController* GetSTUController() const;
 	bool GetViewPort(FVector& ViewLocation, FRotator& ViewRotator) const;
 	FVector GetMuzzleLocation() const;
 	virtual bool GetTraceData(FVector& StartTrace, FVector& EndTrace)  const;
@@ -100,4 +100,5 @@ public:	//functions
 	//Return true is ammo full
 	bool IsAmmoFull();
 
+	virtual void Zoom(const bool bIsZoom);
 };

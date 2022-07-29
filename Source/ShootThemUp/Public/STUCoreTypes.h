@@ -89,6 +89,10 @@ struct FImpactData
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Icon");
 	class UNiagaraSystem* NiagaraEffect;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+	class USoundCue* ImpactSound;
+
 };
 
 //GameMode

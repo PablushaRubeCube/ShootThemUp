@@ -47,7 +47,7 @@ void ASTUBaseWeapon::StopFireWeapon()
 }
 
 
-AController* ASTUBaseWeapon::GetPlayerController() const
+AController* ASTUBaseWeapon::GetSTUController() const
 {
 	ASTUCharacter* Char = Cast<ASTUCharacter>(GetOwner());
 	return Char ? Char->GetController() : nullptr;
@@ -64,7 +64,7 @@ bool ASTUBaseWeapon::GetViewPort(FVector&ViewLocation, FRotator& ViewRotator) co
 	if(!Char) return false;
 	if (Char->IsPlayerControlled())
 	{
-		const AController* Controller = GetPlayerController();
+		const AController* Controller = GetSTUController();
 		if(!Controller) return false;
 		{
 			Controller->GetPlayerViewPoint(ViewLocation,ViewRotator);
@@ -204,6 +204,10 @@ UNiagaraComponent* ASTUBaseWeapon::SpawnMuzlleFX()
 		(MuzzleFX, WeaponMeshComponent , MuzzleSocketName,FVector::ZeroVector,FRotator::ZeroRotator,EAttachLocation::SnapToTarget,true);
 	}
 	return nullptr;
+}
+
+void ASTUBaseWeapon::Zoom(const bool bIsZoom)
+{
 }
 
 

@@ -4,6 +4,7 @@
 #include "Player/STUPlayerController.h"
 #include "Components/STURespawnComponent.h"
 #include "STUGameModeBase.h"
+#include "STUGameInstance.h"
 
 
 DEFINE_LOG_CATEGORY_STATIC(STUPlayerController, All, All)
@@ -19,7 +20,7 @@ void ASTUPlayerController::SetupInputComponent()
 	if (!InputComponent) return;
 
 	InputComponent->BindAction("PauseGame", EInputEvent::IE_Pressed, this, &ASTUPlayerController::PauseGame);
-
+	InputComponent->BindAction("MuteGame", EInputEvent::IE_Pressed, this, &ASTUPlayerController::MuteGame);
 }
 
 void ASTUPlayerController::PauseGame()
@@ -52,6 +53,15 @@ void ASTUPlayerController::GameStateChanged(EGameState State)
 		SetInputMode(FInputModeUIOnly());
 		bShowMouseCursor = (true);
 	}
+}
+
+void ASTUPlayerController::MuteGame()
+{
+	if (!GetWorld()) return;
+	
+	const auto GameInstance = Cast<USTUGameInstance>(GetWorld()->GetGameInstance());
+	if (!GameInstance) return;
+	GameInstance->ToggleSoundClassVolume();
 }
 
 

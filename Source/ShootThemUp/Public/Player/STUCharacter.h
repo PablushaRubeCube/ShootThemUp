@@ -74,6 +74,8 @@ public:	// functions
 
 	void SetPlayerColor(const FLinearColor& Color);
 
+	virtual void TurnOff() override;
+	virtual void Reset() override;
 };
 
 

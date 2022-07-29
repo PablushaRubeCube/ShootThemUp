@@ -235,6 +235,12 @@ bool USTUWeaponComponent::NeedAmmo(TSubclassOf<ASTUBaseWeapon> Weapon)
 	return false;
 }
 
+void USTUWeaponComponent::Zoom(const bool bIsZoom)
+{
+	if (!CurrentWeapon) return;
+	CurrentWeapon->Zoom(bIsZoom);
+}
+
 void USTUWeaponComponent::ClipIsEmpty(ASTUBaseWeapon* AmmoEmptyWeapon)
 {
 	if (!AmmoEmptyWeapon) return;

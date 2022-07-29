@@ -58,6 +58,11 @@ void ASTUHumanCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("NextWeapon", IE_Pressed, WeaponComponent, &USTUWeaponComponent::NextWeapon);
 
 	PlayerInputComponent->BindAction("ReloadWeapon", IE_Pressed, WeaponComponent, &USTUWeaponComponent::Reload);
+
+	DECLARE_DELEGATE_OneParam(FOnZoomWeapon, bool)
+	PlayerInputComponent->BindAction<FOnZoomWeapon>("Zoom", IE_Pressed, WeaponComponent, &USTUWeaponComponent::Zoom, true);
+	PlayerInputComponent->BindAction<FOnZoomWeapon>("Zoom", IE_Released, WeaponComponent, &USTUWeaponComponent::Zoom, false);
+
 }
 
 void ASTUHumanCharacter::MoveForward(float Value)

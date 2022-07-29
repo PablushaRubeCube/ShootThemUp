@@ -28,6 +28,9 @@ private://variables
 	UPROPERTY(EditDefaultsOnly, Category = "Level", meta = (AllowPrivateAccess = "true"))
 	FName MainMenuName = NAME_None;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Sound", meta = (AllowPrivateAccess = "true"))
+	class USoundClass* MasterVolumeClass;
+
 public://functions
 	FORCEINLINE const TArray<FLevelData>& GetLevels() const { return Levels; }
 
@@ -35,4 +38,6 @@ public://functions
 	FORCEINLINE void SetSelectedLevel(const FLevelData& Data) { SelectedLevel = Data; }
 
 	FORCEINLINE FName GetMainMenuName() const { return MainMenuName; }
+
+	void ToggleSoundClassVolume();
 };

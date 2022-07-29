@@ -43,6 +43,9 @@ private://varibales
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "FX", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf <UCameraShakeBase> CameraShake;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Damage", meta = (AllowPrivateAccess = "true"))
+	TMap<class UPhysicalMaterial*,float> DamageModifier;
+	
 private://functions
 
 	UFUNCTION()
@@ -60,6 +63,23 @@ private://functions
 
 	//Call when we was kill
 	void Killed(AController* Killer);
+
+	UFUNCTION()
+	void OnTakePointDamage
+	(AActor* DamagedActor, float Damage, class AController* InstigatedBy,
+	FVector HitLocation, class UPrimitiveComponent* FHitComponent, FName BoneName,
+	FVector ShotFromDirection, const class UDamageType* DamageType, AActor* DamageCauser);
+
+	UFUNCTION()
+	void OnTakeRadialDamage
+	(AActor* DamagedActor, float Damage, const class UDamageType* DamageType,
+	FVector Origin, FHitResult HitInfo, class AController* InstigatedBy, AActor* DamageCauser);
+
+	void TakeDamage(float Damage, class AController* InstigatedBy);
+
+	float GetPointDamageModifier(const AActor* Actor, const FName& BoneName);
+
+	void ReportDamageEvent(float Damage, AController* InstigatedBy);
 
 protected://variables
 	

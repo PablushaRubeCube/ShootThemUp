@@ -24,7 +24,7 @@ private://functions
 
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
-	void HidePickup();
+	void PickupWasTaken();
 
 	void RespawnPickup();
 
@@ -37,6 +37,9 @@ protected://variables
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pickup")
 	float TimerRespawnPickup;
+
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	class USoundCue* PickupSound;
 
 protected://functions
 

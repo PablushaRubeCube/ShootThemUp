@@ -46,6 +46,11 @@ private://varibales
 	UPROPERTY()
 	class UAudioComponent* SpawnedShootSound;
 
+	TOptional<float> DefaultFOV;
+
+	UPROPERTY(EditAnywhere, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	float ZoomFOV;
+
 private://functions
 
 	void MakeDamage(const FHitResult& Result);
@@ -53,12 +58,16 @@ private://functions
 	void InitilizationFX();
 	void ToggleFX(bool bTurnOn);
 
+
+
 protected://functions
 	virtual void MakeShot() override;
 
 	virtual void BeginPlay() override;
 
 	void SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd);
+
+	virtual void Zoom(const bool bIsZoom) override;
 
 public://functions
 	virtual	void StartFireWeapon() override;

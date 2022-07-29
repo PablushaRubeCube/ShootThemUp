@@ -117,5 +117,7 @@ public://functions
 
 	bool NeedAmmo(TSubclassOf<ASTUBaseWeapon>Weapon);
 
+	void Zoom(const bool bIsZoom);
+
 };
 
